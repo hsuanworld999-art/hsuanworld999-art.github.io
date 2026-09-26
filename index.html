@@ -3,20 +3,381 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ASD 蝸小宣｜Hsuanworld</title>
+
+  <title>ASD 蝸小宣｜HSUAN WORLD</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: #17130f;
+      font-family:
+        "Noto Sans TC",
+        "PingFang TC",
+        "Microsoft JhengHei",
+        sans-serif;
+    }
+
+    /* ===== HSUAN WORLD 大門場景 ===== */
+
+    .gate-scene {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+
+      background-image: url("hsuan-gate.png");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+
+      cursor: default;
+    }
+
+    /* 很淡的夜幕，讓文字比較容易閱讀 */
+    .gate-scene::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+
+      background:
+        linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.02),
+          rgba(0, 0, 0, 0.10)
+        );
+
+      pointer-events: none;
+    }
+
+    /* ===== 大門互動區 ===== */
+
+    .gate-trigger {
+      position: absolute;
+
+      /*
+        這四個數字控制「可以點門」的範圍。
+        之後我們可以依你的螢幕再微調。
+      */
+
+      left: 32%;
+      top: 18%;
+      width: 37%;
+      height: 66%;
+
+      z-index: 5;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      cursor: pointer;
+    }
+
+    /* ===== 要進來看看嗎？ ===== */
+
+    .invitation {
+      position: absolute;
+
+      left: 50%;
+      top: 48%;
+
+      transform: translate(-50%, -50%);
+
+      color: rgba(255, 250, 240, 0);
+
+      font-size: clamp(18px, 2vw, 30px);
+      font-weight: 400;
+      letter-spacing: 0.18em;
+
+      text-shadow:
+        0 2px 10px rgba(0, 0, 0, 0.7);
+
+      transition:
+        opacity 0.8s ease,
+        color 0.8s ease,
+        transform 0.8s ease;
+
+      opacity: 0;
+
+      white-space: nowrap;
+      pointer-events: none;
+    }
+
+    /* 滑鼠靠近大門才出現 */
+    .gate-trigger:hover .invitation {
+      opacity: 1;
+
+      color: rgba(255, 250, 240, 0.95);
+
+      transform:
+        translate(-50%, -50%)
+        translateY(-6px);
+    }
+
+    /* ===== 小蝸牛提示 ===== */
+
+    .snail-hint {
+      position: absolute;
+
+      left: 50%;
+      top: 56%;
+
+      transform: translateX(-50%);
+
+      font-size: 28px;
+
+      opacity: 0;
+
+      transition:
+        opacity 0.8s ease,
+        transform 0.8s ease;
+
+      pointer-events: none;
+    }
+
+    .gate-trigger:hover .snail-hint {
+      opacity: 0.9;
+
+      transform:
+        translateX(-50%)
+        translateY(-4px);
+    }
+
+    /* ===== 點門後 ===== */
+
+    .gate-scene.entering {
+      animation: enterWorld 2.4s ease forwards;
+    }
+
+    @keyframes enterWorld {
+
+      0% {
+        transform: scale(1);
+        filter: brightness(1);
+      }
+
+      45% {
+        transform: scale(1.025);
+        filter: brightness(1.04);
+      }
+
+      100% {
+        transform: scale(1.12);
+        filter: brightness(0.45);
+      }
+    }
+
+    /* ===== 進入中的文字 ===== */
+
+    .enter-message {
+      position: fixed;
+
+      left: 50%;
+      top: 50%;
+
+      transform: translate(-50%, -50%);
+
+      z-index: 20;
+
+      color: #fffaf0;
+
+      font-size: clamp(20px, 2.3vw, 34px);
+      letter-spacing: 0.2em;
+
+      opacity: 0;
+
+      pointer-events: none;
+
+      text-shadow:
+        0 3px 15px rgba(0, 0, 0, 0.75);
+    }
+
+    .enter-message.show {
+      animation: welcome 2.2s ease forwards;
+    }
+
+    @keyframes welcome {
+
+      0% {
+        opacity: 0;
+        transform:
+          translate(-50%, -50%)
+          translateY(10px);
+      }
+
+      35% {
+        opacity: 1;
+      }
+
+      75% {
+        opacity: 1;
+      }
+
+      100% {
+        opacity: 0;
+        transform:
+          translate(-50%, -50%)
+          translateY(-8px);
+      }
+    }
+
+    /* ===== 手機 ===== */
+
+    @media (max-width: 768px) {
+
+      .gate-scene {
+        background-position: 50% center;
+      }
+
+      .gate-trigger {
+        left: 20%;
+        top: 15%;
+        width: 60%;
+        height: 70%;
+      }
+
+      /*
+        手機沒有 hover（游標懸停），
+        所以直接讓提示保持淡淡可見。
+      */
+
+      .invitation {
+        opacity: 0.88;
+        color: rgba(255, 250, 240, 0.95);
+        font-size: 18px;
+      }
+
+      .snail-hint {
+        opacity: 0.8;
+      }
+    }
+
+  </style>
 </head>
 
+
 <body>
-  <h1>🐌 ASD 蝸小宣</h1>
 
-  <h2>用自己的方式，看見更大的世界</h2>
+  <main
+    class="gate-scene"
+    id="gateScene"
+    aria-label="HSUAN WORLD 大門"
+  >
 
-  <p>hsuanworld.com 正在施工中……</p>
+    <div
+      class="gate-trigger"
+      id="gateTrigger"
+      role="button"
+      tabindex="0"
+      aria-label="進入 HSUAN WORLD"
+    >
 
-  <p>這裡將記錄 ASD 蝸小宣的生活、漫畫與故事。</p>
+      <div class="invitation">
+        要進來看看嗎？
+      </div>
 
-  <footer>
-    <p>© 2026 Hsuanworld / ASD 蝸小宣</p>
-  </footer>
+      <div class="snail-hint">
+        🐌
+      </div>
+
+    </div>
+
+  </main>
+
+
+  <div
+    class="enter-message"
+    id="enterMessage"
+  >
+    歡迎來到 HSUAN WORLD
+  </div>
+
+
+  <script>
+
+    const gateScene =
+      document.getElementById("gateScene");
+
+    const gateTrigger =
+      document.getElementById("gateTrigger");
+
+    const enterMessage =
+      document.getElementById("enterMessage");
+
+
+    function enterHsuanWorld() {
+
+      /*
+        防止訪客連點十次，
+        把蝸小宣家的門撞壞 🤣
+      */
+
+      if (gateScene.classList.contains("entering")) {
+        return;
+      }
+
+      gateScene.classList.add("entering");
+
+      enterMessage.classList.add("show");
+
+
+      /*
+        目前先停在大門動畫。
+
+        等下一階段庭院完成，
+        這裡會改成：
+
+        window.location.href = "home.html";
+
+        到時候才真正走進蝸小宣家。
+      */
+
+      setTimeout(() => {
+
+        gateScene.classList.remove("entering");
+        enterMessage.classList.remove("show");
+
+      }, 2600);
+
+    }
+
+
+    gateTrigger.addEventListener(
+      "click",
+      enterHsuanWorld
+    );
+
+
+    /*
+      鍵盤也可以用 Enter 或空白鍵進門
+    */
+
+    gateTrigger.addEventListener(
+      "keydown",
+      function(event) {
+
+        if (
+          event.key === "Enter" ||
+          event.key === " "
+        ) {
+
+          event.preventDefault();
+          enterHsuanWorld();
+
+        }
+
+      }
+    );
+
+  </script>
+
 </body>
 </html>
