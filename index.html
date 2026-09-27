@@ -26,29 +26,34 @@
     .scene:not(.is-open) .gate-button.touch-hint .hint { opacity: 1; transform: translate(-50%, -50%); }
 
     /* 文字只在兩片門中間的開口顯示，超出開口就裁掉。 */
-    .welcome-stage { position: absolute; z-index: 2; left: 28%; top: 25%; width: 44%; height: 36%; overflow: hidden; pointer-events: none; }
-    .welcome-track { position: absolute; top: 50%; left: 100%; display: flex; align-items: center; gap: clamp(7px, .9vw, 13px); width: max-content; pointer-events: none; opacity: 0; visibility: hidden; transform: translateY(-50%); }
+    .welcome-stage { position: absolute; z-index: 2; left: 24%; top: 22%; width: 52%; height: 38%; overflow: hidden; pointer-events: none; }
+    .welcome-track { position: absolute; top: 50%; left: 0; display: flex; align-items: center; justify-content: center; gap: clamp(9px, 1vw, 16px); width: 100%; pointer-events: none; opacity: 0; visibility: hidden; transform: translate(100%, -50%); }
     .welcome-track.running { visibility: visible; opacity: 1; animation: crawl 11s linear both; }
-    @keyframes crawl { from { left: 100%; } to { left: -100%; } }
+    @keyframes crawl {
+      0% { transform: translate(100%, -50%); }
+      21% { transform: translate(3%, -50%); }
+      72% { transform: translate(-3%, -50%); }
+      100% { transform: translate(-100%, -50%); }
+    }
     .snail { display: block; width: clamp(65px, 6vw, 95px); height: auto; flex: none; filter: drop-shadow(0 3px 6px rgba(31, 14, 4, .5)); }
-    .message-box { display: flex; flex-direction: column; align-items: center; justify-content: center; width: min(35vw, 480px); min-height: 5em; text-align: center; }
-    .message { margin: 0; color: #fff0c4; font-size: clamp(16px, 1.8vw, 28px); letter-spacing: .05em; line-height: 1.45; white-space: nowrap; text-shadow: 0 1px 3px #61401c, 0 3px 12px #2c170a, 0 0 18px #dfae65; opacity: 0; filter: blur(14px); transform: translateY(7px); }
-    .message.en { font-size: clamp(13px, 1.35vw, 21px); letter-spacing: .08em; }
+    .message-box { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 0 1 auto; min-width: 0; text-align: center; }
+    .message { margin: 0; color: #fff0c4; font-size: clamp(17px, 2vw, 32px); letter-spacing: .04em; line-height: 1.45; white-space: nowrap; text-shadow: 0 2px 4px #2d1608, 0 4px 15px #1a0b04, 0 0 20px #d99d4d; opacity: 0; filter: blur(14px); transform: translateY(7px); }
+    .message.en { font-size: clamp(15px, 1.55vw, 24px); letter-spacing: .07em; }
     .message.reveal { animation: mist 4.5s ease-in-out both; }
     @keyframes mist { 0% { opacity: 0; filter: blur(14px); transform: translateY(7px); } 24% { opacity: 1; filter: blur(0); transform: translateY(0); } 80% { opacity: 1; filter: blur(0); transform: translateY(0); } 100% { opacity: 0; filter: blur(10px); transform: translateY(-4px); } }
 
     @media (max-width: 768px) {
       .gate-button { left: 18%; top: 15%; width: 64%; height: 70%; }
-      .welcome-stage { left: 17%; top: 26%; width: 66%; height: 32%; }
+      .welcome-stage { left: 13%; top: 25%; width: 74%; height: 32%; }
       .snail { width: clamp(43px, 12vw, 65px); }
-      .message-box { width: 48vw; }
-      .message { font-size: clamp(12px, 2.9vw, 19px); letter-spacing: 0; white-space: normal; }
-      .message.en { font-size: clamp(10px, 2.3vw, 16px); letter-spacing: .02em; }
+      .message-box { max-width: 56vw; }
+      .message { font-size: clamp(13px, 3.2vw, 20px); letter-spacing: 0; white-space: normal; }
+      .message.en { font-size: clamp(11px, 2.6vw, 17px); letter-spacing: .02em; }
     }
     @media (prefers-reduced-motion: reduce) {
       .opened { transition: opacity .25s linear; transform: none; }
       .scene.is-open .opened { transform: none; }
-      .welcome-track.running { animation: none; left: 50%; transform: translate(-50%, -50%); }
+      .welcome-track.running { animation: none; transform: translate(0, -50%); }
       .message.reveal { animation: mist 4.5s ease-in-out both; }
     }
   </style>
@@ -116,7 +121,7 @@
       later(() => {
         zh.classList.add('reveal');
         en.classList.add('reveal');
-      }, 4000);
+      }, 3500);
     }
 
     function activateGate() {
