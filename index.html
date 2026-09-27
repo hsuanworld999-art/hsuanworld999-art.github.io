@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>ASD 蝸小宣｜HSUAN WORLD</title>
+
+<style>
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #111;
+}
+
+body {
+  font-family:
+    "Noto Serif TC",
+    "Songti TC",
+    "PMingLiU",
+    serif;
+}
+
+/* ===== 整個入口 ===== */
+
+.gate-scene {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: #111;
+}
+
+/* 開門後的庭院，永遠放在最底層 */
+
+.open-world {
+  position: absolute;
+  inset: 0;
+
+  background-image: url("hsuan-gate-open.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  transform: scale(1.015);
+}
+
+/* 關閉的大門 */
+
+.closed-gate {
+  position: absolute;
+  inset: 0;
+
+  background-image: url("hsuan-gate.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+
+  opacity: 1;
+  transform: scale(1);
+  z-index: 5;
+
+  transition:
+    opacity 2s ease-in-out,
+    transform 2s ease-in-out;
+
+  pointer-events: none;
+}
+
+/*
+  開門：
+  關門圖慢慢淡去並非常輕微向後退，
+  底下的庭院逐漸出現。
+*/
+
+.gate-scene.open .closed-gate {
+  opacity: 0;
+  transform: scale(1.025);
+}
+
+/* ===== 真正可以敲的區域 ===== */
+
+.gate-trigger {
+  position: absolute;
+
+  /* 限制在中央兩扇門 */
+  left: 34%;
+  top: 18%;
+  width: 32%;
+  height: 64%;
+
+  z-index: 20;
+  cursor: pointer;
+
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  touch-action: manipulation;
+}
+
+/* ===== 敲門提示 ===== */
+
+.gate-instruction {
+  position: absolute;
+  left: 50%;
+  top: 44%;
+  transform: translate(-50%, -50%);
+
+  width: 90%;
+
+  text-align: center;
+  white-space: nowrap;
+
+  font-family:
+    "Noto Serif TC",
+    "Songti TC",
+    "PMingLiU",
+    serif;
+
+  font-size: clamp(17px, 1.7vw, 27px);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+
+  color: rgba(255, 248, 230, 0.94);
+
+  text-shadow:
+    0 2px 8px rgba(0,0,0,0.75),
+    0 0 16px rgba(0,0,0,0.35);
+
+  opacity: 0;
+  transition: opacity 0.4s ease;
+
+  pointer-events: none;
+}
+
+/* 電腦滑鼠移入才顯示 */
+
+@media (hover: hover) and (pointer: fine) {
+  .gate-scene.closed .gate-trigger:hover .gate-instruction {
+    opacity: 1;
+  }
+}
+
+/* 手機 / 平板第一次碰門時顯示 */
+
+.gate-instruction.touch-visible {
+  opacity: 1;
+}
+
+/* ===== 歡迎文字 ===== */
+
+.welcome {
+  position: absolute;
+
+  left: 50%;
+  top: 45%;
+  transform: translate(-50%, -50%);
+
+  width: min(32vw, 560px);
+
+  text-align: center;
+
+  font-family:
+    "Noto Serif TC",
+    "Songti TC",
+    "PMingLiU",
+    serif;
+
+  color: rgba(255, 250, 238, 0.97);
+
+  text-shadow:
+    0 2px 10px rgba(0,0,0,0.8),
+    0 0 22px rgba(0,0,0,0.35);
+
+  opacity: 0;
+  pointer-events: none;
+
+  z-index: 15;
+
+  transition: opacity 1s ease;
+}
+
+.welcome-cn {
+  font-size: clamp(20px, 2vw, 34px);
+  letter-spacing: 0.10em;
+}
+
+.welcome-en {
+  font-size: clamp(17px, 1.65vw, 29px);
+  letter-spacing: 0.12em;
+}
+
+.welcome.show {
+  opacity: 1;
+}
+
+/* ===== 開門後兩側門扇的關門感應區 ===== */
+
+.close-zone {
+  position: absolute;
+  top: 12%;
+  height: 75%;
+  width: 17%;
+
+  z-index: 18;
+
+  cursor: pointer;
+
+  display: none;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+.close-left {
+  left: 15%;
+}
+
+.close-right {
+  right: 15%;
+}
+
+.gate-scene.open .close-zone {
+  display: block;
+}
+
+/* ===== 音效 ===== */
+
+audio {
+  display: none;
+}
+
+/* ===== 手機 ===== */
+
+@media (max-width: 800px) {
+
+  .gate-trigger {
+    left: 28%;
+    width: 44%;
+  }
+
+  .gate-instruction {
+    font-size: clamp(15px, 4vw, 21px);
+    letter-spacing: 0.10em;
+  }
+
+  .welcome {
+    width: 70vw;
+  }
+
+  .close-zone {
+    width: 22%;
+  }
+
+  .close-left {
+    left: 5%;
+  }
+
+  .close-right {
+    right: 5%;
+  }
+}
+</style>
+</head>
+
+
+<body>
+
+<div
+  id="gateScene"
+  class="gate-scene closed"
+>
+
+  <!-- 開門後庭院 -->
+  <div class="open-world"></div>
+
+  <!-- 關閉大門 -->
+  <div class="closed-gate"></div>
+
+
+  <!-- 敲門區 -->
+  <div
+    id="gateTrigger"
+    class="gate-trigger"
+    role="button"
+    tabindex="0"
+    aria-label="點三下打開大門"
+  >
+
+    <div
+      id="gateInstruction"
+      class="gate-instruction"
+    >
+      點三下打開大門
+    </div>
+
+  </div>
+
+
+  <!-- 開門後：點左右任一側即可關門 -->
+
+  <div
+    id="closeLeft"
+    class="close-zone close-left"
+    aria-label="關閉大門"
+  ></div>
+
+  <div
+    id="closeRight"
+    class="close-zone close-right"
+    aria-label="關閉大門"
+  ></div>
+
+
+  <!-- 歡迎文字 -->
+
+  <div
+    id="welcomeCN"
+    class="welcome welcome-cn"
+  >
+    歡迎來到 ASD 蝸小宣的家
+  </div>
+
+  <div
+    id="welcomeEN"
+    class="welcome welcome-en"
+  >
+    WELCOME TO HSUAN WORLD
+  </div>
+
+
+  <!--
+    之後上傳音效：
+    knock.mp3 = 木門敲擊
+    door.mp3  = 木門開關
+  -->
+
+  <audio
+    id="knockSound"
+    preload="auto"
+    src="knock.mp3"
+  ></audio>
+
+  <audio
+    id="doorSound"
+    preload="auto"
+    src="door.mp3"
+  ></audio>
+
+</div>
+
+
+<script>
+
+const scene =
+  document.getElementById("gateScene");
+
+const gate =
+  document.getElementById("gateTrigger");
+
+const instruction =
+  document.getElementById("gateInstruction");
+
+const closeLeft =
+  document.getElementById("closeLeft");
+
+const closeRight =
+  document.getElementById("closeRight");
+
+const welcomeCN =
+  document.getElementById("welcomeCN");
+
+const welcomeEN =
+  document.getElementById("welcomeEN");
+
+const knockSound =
+  document.getElementById("knockSound");
+
+const doorSound =
+  document.getElementById("doorSound");
+
+
+/*
+  closed
+  opening
+  open
+  closing
+*/
+
+let gateState = "closed";
+
+let knockCount = 0;
+
+let knockResetTimer = null;
+
+let touchInstructionTimer = null;
+
+let welcomeTimers = [];
+
+
+/* ===== 播放敲門聲 ===== */
+
+function playKnock() {
+
+  /*
+    cloneNode 讓使用者快速連點時，
+    前一聲不用播完就可以立刻播放下一聲。
+    所以節奏完全跟著使用者。
+  */
+
+  try {
+
+    const sound =
+      knockSound.cloneNode();
+
+    sound.volume = 0.75;
+
+    sound.play().catch(() => {});
+
+  } catch (error) {}
+
+}
+
+
+/* ===== 播放門聲 ===== */
+
+function playDoor() {
+
+  try {
+
+    doorSound.currentTime = 0;
+
+    doorSound.volume = 0.55;
+
+    doorSound.play().catch(() => {});
+
+  } catch (error) {}
+
+}
+
+
+/* ===== 清除歡迎動畫 ===== */
+
+function clearWelcome() {
+
+  welcomeTimers.forEach(timer =>
+    clearTimeout(timer)
+  );
+
+  welcomeTimers = [];
+
+  welcomeCN.classList.remove("show");
+  welcomeEN.classList.remove("show");
+
+}
+
+
+/* ===== 歡迎動畫 ===== */
+
+function runWelcome() {
+
+  clearWelcome();
+
+  welcomeTimers.push(
+
+    setTimeout(() => {
+
+      welcomeCN.classList.add("show");
+
+    }, 800)
+
+  );
+
+
+  welcomeTimers.push(
+
+    setTimeout(() => {
+
+      welcomeCN.classList.remove("show");
+
+    }, 3000)
+
+  );
+
+
+  welcomeTimers.push(
+
+    setTimeout(() => {
+
+      welcomeEN.classList.add("show");
+
+    }, 3900)
+
+  );
+
+
+  welcomeTimers.push(
+
+    setTimeout(() => {
+
+      welcomeEN.classList.remove("show");
+
+    }, 6100)
+
+  );
+
+}
+
+
+/* ===== 開門 ===== */
+
+function openGate() {
+
+  if (gateState !== "closed") return;
+
+  gateState = "opening";
+
+  instruction.classList.remove(
+    "touch-visible"
+  );
+
+  playDoor();
+
+  scene.classList.remove("closed");
+  scene.classList.add("open");
+
+  /*
+    CSS 開門動畫 2 秒
+  */
+
+  setTimeout(() => {
+
+    gateState = "open";
+
+    knockCount = 0;
+
+    runWelcome();
+
+  }, 2000);
+
+}
+
+
+/* ===== 關門 ===== */
+
+function closeGate() {
+
+  if (gateState !== "open") return;
+
+  gateState = "closing";
+
+  clearWelcome();
+
+  playDoor();
+
+  scene.classList.remove("open");
+  scene.classList.add("closed");
+
+  setTimeout(() => {
+
+    gateState = "closed";
+
+    knockCount = 0;
+
+  }, 2000);
+
+}
+
+
+/* ===== 敲門 ===== */
+
+function knock() {
+
+  if (gateState !== "closed") return;
+
+  /*
+    每次點擊立刻發聲。
+    沒有任何畫面抖動。
+  */
+
+  playKnock();
+
+  knockCount += 1;
+
+
+  /*
+    三秒內沒有完成三下，
+    重新計算。
+  */
+
+  clearTimeout(knockResetTimer);
+
+  knockResetTimer =
+    setTimeout(() => {
+
+      knockCount = 0;
+
+    }, 3000);
+
+
+  /*
+    第三下完成
+  */
+
+  if (knockCount >= 3) {
+
+    clearTimeout(knockResetTimer);
+
+    knockCount = 0;
+
+    /*
+      讓第三聲完整出現一下，
+      0.4 秒後開始開門。
+    */
+
+    gateState = "opening";
+
+    setTimeout(() => {
+
+      /*
+        暫時切回 closed，
+        交給 openGate 統一處理。
+      */
+
+      gateState = "closed";
+
+      openGate();
+
+    }, 400);
+
+  }
+
+}
+
+
+/* ===== 手機第一次點門 ===== */
+
+function showTouchInstruction() {
+
+  if (
+    !window.matchMedia(
+      "(hover: none)"
+    ).matches
+  ) return;
+
+  instruction.classList.add(
+    "touch-visible"
+  );
+
+  clearTimeout(
+    touchInstructionTimer
+  );
+
+  touchInstructionTimer =
+    setTimeout(() => {
+
+      instruction.classList.remove(
+        "touch-visible"
+      );
+
+    }, 1800);
+
+}
+
+
+/* ===== 點門 ===== */
+
+gate.addEventListener(
+  "click",
+  () => {
+
+    if (gateState !== "closed") return;
+
+    showTouchInstruction();
+
+    knock();
+
+  }
+);
+
+
+/* ===== 鍵盤操作 ===== */
+
+gate.addEventListener(
+  "keydown",
+  event => {
+
+    if (
+      event.key === "Enter" ||
+      event.key === " "
+    ) {
+
+      event.preventDefault();
+
+      knock();
+
+    }
+
+  }
+);
+
+
+/* ===== 點左右門扇關門 ===== */
+
+closeLeft.addEventListener(
+  "click",
+  closeGate
+);
+
+closeRight.addEventListener(
+  "click",
+  closeGate
+);
+
+
+/* ===== 預載開門圖片 ===== */
+
+window.addEventListener(
+  "load",
+  () => {
+
+    setTimeout(() => {
+
+      const preload =
+        new Image();
+
+      preload.src =
+        "hsuan-gate-open.png";
+
+    }, 500);
+
+  }
+);
+
+</script>
+
+</body>
+</html>
