@@ -17,53 +17,206 @@
     .scene.is-open .opened { opacity: 1; transform: scale(1); }
     .shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, transparent 76%, rgba(12, 7, 4, .14)); }
 
-    /* 取門景上方的櫻花枝影輕輕搖動。 */
-    .branch { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: .55; background: url("hsuan-gate.png") center / cover no-repeat; will-change: transform; }
+    /* 櫻花枝影輕輕搖動。 */
+    .branch {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: .55;
+      background: url("hsuan-gate.png") center / cover no-repeat;
+      will-change: transform;
+    }
     .scene.is-open .branch { background-image: url("hsuan-gate-open.png"); }
-    .branch-left { transform-origin: 8% 4%; -webkit-mask-image: radial-gradient(ellipse 40% 28% at 8% 3%, #000 0%, transparent 95%); mask-image: radial-gradient(ellipse 40% 28% at 8% 3%, #000 0%, transparent 95%); animation: branchSwayLeft 8s ease-in-out infinite alternate; }
-    .branch-right { transform-origin: 92% 4%; -webkit-mask-image: radial-gradient(ellipse 38% 26% at 92% 3%, #000 0%, transparent 95%); mask-image: radial-gradient(ellipse 38% 26% at 92% 3%, #000 0%, transparent 95%); animation: branchSwayRight 9s ease-in-out infinite alternate; }
-    @keyframes branchSwayLeft { from { transform: rotate(-.35deg) translateX(-2px); } to { transform: rotate(.55deg) translateX(3px); } }
-    @keyframes branchSwayRight { from { transform: rotate(.4deg) translateX(2px); } to { transform: rotate(-.5deg) translateX(-3px); } }
+    .branch-left {
+      transform-origin: 8% 4%;
+      -webkit-mask-image: radial-gradient(ellipse 40% 28% at 8% 3%, #000 0%, transparent 95%);
+      mask-image: radial-gradient(ellipse 40% 28% at 8% 3%, #000 0%, transparent 95%);
+      animation: branchSwayLeft 8s ease-in-out infinite alternate;
+    }
+    .branch-right {
+      transform-origin: 92% 4%;
+      -webkit-mask-image: radial-gradient(ellipse 38% 26% at 92% 3%, #000 0%, transparent 95%);
+      mask-image: radial-gradient(ellipse 38% 26% at 92% 3%, #000 0%, transparent 95%);
+      animation: branchSwayRight 9s ease-in-out infinite alternate;
+    }
+    @keyframes branchSwayLeft {
+      from { transform: rotate(-.35deg) translateX(-2px); }
+      to { transform: rotate(.55deg) translateX(3px); }
+    }
+    @keyframes branchSwayRight {
+      from { transform: rotate(.4deg) translateX(2px); }
+      to { transform: rotate(-.5deg) translateX(-3px); }
+    }
 
-    .petals { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
-    .petal { position: absolute; top: -12vh; width: var(--size); height: calc(var(--size) * 1.35); border-radius: 80% 15% 75% 20%; background: radial-gradient(circle at 30% 25%, #fffaf7 0%, #ffdce7 50%, #e99aaf 100%); opacity: .8; box-shadow: 0 0 4px rgba(255, 222, 231, .5); animation: petalFall var(--duration) linear var(--delay) infinite; }
-    @keyframes petalFall { 0% { transform: translate(0, -8vh) rotate(0deg); opacity: 0; } 8% { opacity: .8; } 50% { transform: translate(var(--half-drift), 50vh) rotate(130deg); } 90% { opacity: .75; } 100% { transform: translate(var(--drift), 115vh) rotate(285deg); opacity: 0; } }
+    .petals {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .petal {
+      position: absolute;
+      top: -12vh;
+      width: var(--size);
+      height: calc(var(--size) * 1.35);
+      border-radius: 80% 15% 75% 20%;
+      background: radial-gradient(circle at 30% 25%, #fffaf7 0%, #ffdce7 50%, #e99aaf 100%);
+      opacity: .8;
+      box-shadow: 0 0 4px rgba(255, 222, 231, .5);
+      animation: petalFall var(--duration) linear var(--delay) infinite;
+    }
+    @keyframes petalFall {
+      0% { transform: translate(0, -8vh) rotate(0deg); opacity: 0; }
+      8% { opacity: .8; }
+      50% { transform: translate(var(--half-drift), 50vh) rotate(130deg); }
+      90% { opacity: .75; }
+      100% { transform: translate(var(--drift), 115vh) rotate(285deg); opacity: 0; }
+    }
 
-    .sound-button { position: absolute; z-index: 6; right: max(14px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); padding: 9px 13px; border: 1px solid rgba(255, 238, 197, .65); border-radius: 999px; background: rgba(38, 22, 13, .7); color: #fff2d4; font: 14px/1.2 sans-serif; cursor: pointer; opacity: 0; visibility: hidden; transition: opacity .4s ease; }
-    .scene.is-open .sound-button { opacity: 1; visibility: visible; }
-    .sound-button:focus-visible { outline: 2px solid #fff4d2; outline-offset: 3px; }
+    /* 關門時點中間的門；開門後點畫面即可關門。 */
+    .gate-button {
+      position: absolute;
+      z-index: 3;
+      left: 32%;
+      top: 18%;
+      width: 36%;
+      height: 65%;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #fff8e7;
+      cursor: pointer;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .scene.is-open .gate-button {
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+    }
+    .gate-button:focus-visible {
+      outline: 2px solid #fff3ce;
+      outline-offset: -4px;
+    }
+    .hint {
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      width: max-content;
+      max-width: 90vw;
+      transform: translate(-50%, -42%);
+      opacity: 0;
+      pointer-events: none;
+      white-space: nowrap;
+      font-size: clamp(17px, 1.8vw, 27px);
+      letter-spacing: .12em;
+      text-shadow: 0 2px 9px #130b06, 0 3px 22px #130b06;
+      transition: opacity .35s ease, transform .35s ease;
+    }
+    @media (hover: hover) and (pointer: fine) {
+      .scene:not(.is-open) .gate-button:hover .hint {
+        opacity: 1;
+        transform: translate(-50%, -50%);
+      }
+    }
+    .scene:not(.is-open) .gate-button.touch-hint .hint {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
 
-    .gate-button { position: absolute; z-index: 3; left: 32%; top: 18%; width: 36%; height: 65%; padding: 0; border: 0; background: transparent; color: #fff8e7; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
-    .scene.is-open .gate-button { left: 0; top: 0; width: 100%; height: 100%; }
-    .gate-button:focus-visible { outline: 2px solid #fff3ce; outline-offset: -4px; }
-    .hint { position: absolute; left: 50%; top: 48%; width: max-content; max-width: 90vw; transform: translate(-50%, -42%); opacity: 0; pointer-events: none; white-space: nowrap; font-size: clamp(17px, 1.8vw, 27px); letter-spacing: .12em; text-shadow: 0 2px 9px #130b06, 0 3px 22px #130b06; transition: opacity .35s ease, transform .35s ease; }
-    @media (hover: hover) and (pointer: fine) { .scene:not(.is-open) .gate-button:hover .hint { opacity: 1; transform: translate(-50%, -50%); } }
-    .scene:not(.is-open) .gate-button.touch-hint .hint { opacity: 1; transform: translate(-50%, -50%); }
-
-    /* 文字只在兩片門中間的開口顯示。 */
-    .welcome-stage { position: absolute; z-index: 2; left: 24%; top: 22%; width: 52%; height: 38%; overflow: hidden; pointer-events: none; }
-    .welcome-track { position: absolute; top: 50%; left: 0; display: flex; align-items: center; justify-content: center; gap: clamp(9px, 1vw, 16px); width: 100%; pointer-events: none; opacity: 0; visibility: hidden; transform: translate(100%, -50%); }
-    .welcome-track.running { visibility: visible; opacity: 1; animation: crawl 18s linear both; }
+    /* 蝸小宣與歡迎詞只在兩片門之間顯示。 */
+    .welcome-stage {
+      position: absolute;
+      z-index: 2;
+      left: 24%;
+      top: 27%;
+      width: 52%;
+      height: 42%;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .welcome-track {
+      position: absolute;
+      top: 50%;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(9px, 1vw, 16px);
+      width: 100%;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transform: translate(100%, -50%);
+    }
+    .welcome-track.running {
+      visibility: visible;
+      opacity: 1;
+      animation: crawl 18s linear both;
+    }
     @keyframes crawl {
       0% { transform: translate(100%, -50%); }
       30% { transform: translate(3%, -50%); }
       72% { transform: translate(-3%, -50%); }
       100% { transform: translate(-100%, -50%); }
     }
-    .snail { display: block; width: clamp(65px, 6vw, 95px); height: auto; flex: none; filter: drop-shadow(0 3px 6px rgba(31, 14, 4, .5)); }
-    .message-box { display: flex; flex-direction: column; align-items: center; justify-content: center; flex: 0 1 auto; min-width: 0; text-align: center; }
-    .message { margin: 0; color: #fff0c4; font-size: clamp(17px, 2vw, 32px); letter-spacing: .04em; line-height: 1.45; white-space: nowrap; text-shadow: 0 2px 4px #2d1608, 0 4px 15px #1a0b04, 0 0 20px #d99d4d; opacity: 0; filter: blur(14px); transform: translateY(7px); }
-    .message.en { font-size: clamp(15px, 1.55vw, 24px); letter-spacing: .07em; }
+    .snail {
+      display: block;
+      width: clamp(65px, 6vw, 95px);
+      height: auto;
+      flex: none;
+      filter: drop-shadow(0 3px 6px rgba(31, 14, 4, .5));
+    }
+    .message-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex: 0 1 auto;
+      min-width: 0;
+      text-align: center;
+    }
+    .message {
+      margin: 0;
+      color: #fff0c4;
+      font-size: clamp(17px, 2vw, 32px);
+      letter-spacing: .04em;
+      line-height: 1.45;
+      white-space: nowrap;
+      text-shadow: 0 2px 4px #2d1608, 0 4px 15px #1a0b04, 0 0 20px #d99d4d;
+      opacity: 0;
+      filter: blur(14px);
+      transform: translateY(7px);
+    }
+    .message.en {
+      font-size: clamp(15px, 1.55vw, 24px);
+      letter-spacing: .07em;
+    }
     .message.reveal { animation: mist 7s ease-in-out both; }
-    @keyframes mist { 0% { opacity: 0; filter: blur(14px); transform: translateY(7px); } 15% { opacity: 1; filter: blur(0); transform: translateY(0); } 85% { opacity: 1; filter: blur(0); transform: translateY(0); } 100% { opacity: 0; filter: blur(10px); transform: translateY(-4px); } }
+    @keyframes mist {
+      0% { opacity: 0; filter: blur(14px); transform: translateY(7px); }
+      15% { opacity: 1; filter: blur(0); transform: translateY(0); }
+      85% { opacity: 1; filter: blur(0); transform: translateY(0); }
+      100% { opacity: 0; filter: blur(10px); transform: translateY(-4px); }
+    }
 
     @media (max-width: 768px) {
       .gate-button { left: 18%; top: 15%; width: 64%; height: 70%; }
-      .welcome-stage { left: 13%; top: 25%; width: 74%; height: 32%; }
+      .welcome-stage { left: 13%; top: 28%; width: 74%; height: 40%; }
       .snail { width: clamp(43px, 12vw, 65px); }
       .message-box { max-width: 56vw; }
-      .message { font-size: clamp(13px, 3.2vw, 20px); letter-spacing: 0; white-space: normal; }
-      .message.en { font-size: clamp(11px, 2.6vw, 17px); letter-spacing: .02em; }
+      .message {
+        font-size: clamp(13px, 3.2vw, 20px);
+        letter-spacing: 0;
+        white-space: normal;
+      }
+      .message.en {
+        font-size: clamp(11px, 2.6vw, 17px);
+        letter-spacing: .02em;
+      }
     }
     @media (prefers-reduced-motion: reduce) {
       .opened { transition: opacity .25s linear; transform: none; }
@@ -83,10 +236,11 @@
     <div class="branch branch-left" aria-hidden="true"></div>
     <div class="branch branch-right" aria-hidden="true"></div>
     <div class="petals" id="petals" aria-hidden="true"></div>
+
     <button class="gate-button" id="gateButton" type="button" aria-label="點三下打開大門">
       <span class="hint" id="hint">點三下打開大門</span>
     </button>
-    <button class="sound-button" id="soundButton" type="button" aria-label="關閉流水聲" aria-pressed="true">🔊 水聲</button>
+
     <div class="welcome-stage" aria-hidden="true">
       <div class="welcome-track" id="welcomeTrack">
         <img class="snail" src="hsuan-snail.png" alt="" decoding="async">
@@ -97,21 +251,19 @@
       </div>
     </div>
   </main>
+
   <script>
     const scene = document.getElementById('scene');
     const gateButton = document.getElementById('gateButton');
     const track = document.getElementById('welcomeTrack');
     const zh = document.getElementById('zh');
     const en = document.getElementById('en');
-    const soundButton = document.getElementById('soundButton');
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let opened = false;
     let knocks = 0;
     let resetTimer;
     let hintTimer;
     let timers = [];
-    let soundEnabled = true;
-    let audioContext, waterGain, waterTimer;
 
     /* 花瓣從兩側櫻花枝飄落。 */
     const petalLayer = document.getElementById('petals');
@@ -128,60 +280,9 @@
       petalLayer.appendChild(petal);
     }
 
-    /* 零星的輕水滴聲；避免連續雜音聽起來像大雨。 */
-    function waterDrop() {
-      if (!waterGain || !audioContext || !opened || !soundEnabled) return;
-      const now = audioContext.currentTime;
-      const oscillator = audioContext.createOscillator();
-      const envelope = audioContext.createGain();
-      const pitch = 390 + Math.random() * 420;
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime(pitch, now);
-      oscillator.frequency.exponentialRampToValueAtTime(pitch * .62, now + .09);
-      envelope.gain.setValueAtTime(.0001, now);
-      envelope.gain.exponentialRampToValueAtTime(.035 + Math.random() * .025, now + .008);
-      envelope.gain.exponentialRampToValueAtTime(.0001, now + .12);
-      oscillator.connect(envelope).connect(waterGain);
-      oscillator.start(now);
-      oscillator.stop(now + .13);
-      oscillator.onended = () => { oscillator.disconnect(); envelope.disconnect(); };
-      waterTimer = window.setTimeout(waterDrop, 115 + Math.random() * 270);
+    function later(fn, delay) {
+      timers.push(window.setTimeout(fn, delay));
     }
-    function startWater() {
-      if (!soundEnabled) return;
-      const AudioContextType = window.AudioContext || window.webkitAudioContext;
-      if (!AudioContextType) return;
-      try {
-        audioContext ||= new AudioContextType();
-        audioContext.resume();
-        if (waterGain) return;
-        waterGain = audioContext.createGain();
-        waterGain.gain.setValueAtTime(0, audioContext.currentTime);
-        waterGain.gain.linearRampToValueAtTime(.38, audioContext.currentTime + 1);
-        waterGain.connect(audioContext.destination);
-        waterDrop();
-      } catch (error) { /* 聲音不可用時，畫面仍可正常開門。 */ }
-    }
-    function stopWater() {
-      window.clearTimeout(waterTimer);
-      if (!waterGain || !audioContext) return;
-      const gain = waterGain;
-      waterGain = null;
-      const now = audioContext.currentTime;
-      gain.gain.cancelScheduledValues(now);
-      gain.gain.setValueAtTime(gain.gain.value, now);
-      gain.gain.linearRampToValueAtTime(0, now + .2);
-      window.setTimeout(() => gain.disconnect(), 350);
-    }
-    soundButton.addEventListener('click', event => {
-      event.stopPropagation();
-      soundEnabled = !soundEnabled;
-      soundButton.textContent = soundEnabled ? '🔊 水聲' : '🔇 水聲';
-      soundButton.setAttribute('aria-label', soundEnabled ? '關閉流水聲' : '開啟流水聲');
-      soundButton.setAttribute('aria-pressed', String(soundEnabled));
-      if (soundEnabled && opened) startWater(); else stopWater();
-    });
-    function later(fn, delay) { timers.push(window.setTimeout(fn, delay)); }
     function clearWelcome() {
       timers.forEach(window.clearTimeout);
       timers = [];
@@ -192,7 +293,6 @@
     }
     function closeGate() {
       opened = false;
-      stopWater();
       knocks = 0;
       clearWelcome();
       scene.classList.remove('is-open');
@@ -200,12 +300,12 @@
     }
     function openGate() {
       opened = true;
-      startWater();
       knocks = 0;
       clearTimeout(resetTimer);
       clearTimeout(hintTimer);
       gateButton.classList.remove('touch-hint');
       gateButton.setAttribute('aria-label', '點一下關上大門');
+
       later(() => scene.classList.add('is-open'), 350);
       later(() => track.classList.add('running'), 1900);
       later(() => {
@@ -214,7 +314,10 @@
       }, 5900);
     }
     function activateGate() {
-      if (opened) { closeGate(); return; }
+      if (opened) {
+        closeGate();
+        return;
+      }
       if (window.matchMedia('(hover: none)').matches) {
         gateButton.classList.add('touch-hint');
         clearTimeout(hintTimer);
@@ -226,6 +329,7 @@
       if (knocks >= 3) openGate();
     }
     gateButton.addEventListener('click', activateGate);
+
     window.addEventListener('load', () => {
       window.setTimeout(() => {
         ['hsuan-gate-open.png', 'hsuan-snail.png'].forEach(src => {
@@ -234,7 +338,9 @@
         });
       }, 400);
     });
-    motion.addEventListener?.('change', () => { if (opened) closeGate(); });
+    motion.addEventListener?.('change', () => {
+      if (opened) closeGate();
+    });
   </script>
 </body>
 </html>
