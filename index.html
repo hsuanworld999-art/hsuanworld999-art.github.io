@@ -1,13 +1,27 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#24170e">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1, viewport-fit=cover"
+>
+
+<meta
+  name="theme-color"
+  content="#24170e"
+>
 
 <title>ASD 蝸小宣的家｜HSUAN WORLD</title>
 
 <style>
+
+/* ==================================================
+   基本
+================================================== */
 
 :root {
   color-scheme: dark;
@@ -27,6 +41,7 @@ body {
 
 body {
   background: #24170e;
+
   font-family:
     "Noto Serif TC",
     "Songti TC",
@@ -40,6 +55,7 @@ body {
 ================================================== */
 
 .scene {
+
   position: relative;
 
   width: 100%;
@@ -53,10 +69,11 @@ body {
 
 
 /* ==================================================
-   關門 / 開門背景
+   大門背景
 ================================================== */
 
 .picture {
+
   position: absolute;
   inset: 0;
 
@@ -69,17 +86,19 @@ body {
 
 
 .closed {
+
   background-image:
     url("hsuan-gate.png");
 
   opacity: 1;
 
   transition:
-    opacity 1.3s ease;
+    opacity 1.35s ease;
 }
 
 
 .opened {
+
   background-image:
     url("hsuan-gate-open.png");
 
@@ -89,17 +108,21 @@ body {
     scale(1.018);
 
   transition:
-    opacity 1.5s ease,
-    transform 2.6s ease;
+    opacity 1.55s ease,
+    transform 2.7s ease;
 }
 
 
-.scene.is-open .closed {
+.scene.is-open
+.closed {
+
   opacity: 0;
 }
 
 
-.scene.is-open .opened {
+.scene.is-open
+.opened {
+
   opacity: 1;
 
   transform:
@@ -112,6 +135,7 @@ body {
 ================================================== */
 
 .shade {
+
   position: absolute;
   inset: 0;
 
@@ -120,19 +144,23 @@ body {
   pointer-events: none;
 
   background:
+
     linear-gradient(
       to bottom,
-      transparent 74%,
+
+      transparent 75%,
+
       rgba(12,7,4,.13)
     );
 }
 
 
 /* ==================================================
-   櫻花枝輕晃
+   櫻花枝輕微晃動
 ================================================== */
 
 .branch {
+
   position: absolute;
   inset: 0;
 
@@ -152,29 +180,38 @@ body {
 }
 
 
-.scene.is-open .branch {
+.scene.is-open
+.branch {
+
   background-image:
     url("hsuan-gate-open.png");
 }
 
 
 .branch-left {
+
   transform-origin:
     8% 4%;
 
   -webkit-mask-image:
+
     radial-gradient(
       ellipse 40% 28%
       at 8% 3%,
+
       #000 0%,
+
       transparent 95%
     );
 
   mask-image:
+
     radial-gradient(
       ellipse 40% 28%
       at 8% 3%,
+
       #000 0%,
+
       transparent 95%
     );
 
@@ -187,22 +224,29 @@ body {
 
 
 .branch-right {
+
   transform-origin:
     92% 4%;
 
   -webkit-mask-image:
+
     radial-gradient(
       ellipse 38% 26%
       at 92% 3%,
+
       #000 0%,
+
       transparent 95%
     );
 
   mask-image:
+
     radial-gradient(
       ellipse 38% 26%
       at 92% 3%,
+
       #000 0%,
+
       transparent 95%
     );
 
@@ -217,32 +261,38 @@ body {
 @keyframes branchLeft {
 
   from {
+
     transform:
       rotate(-.35deg)
       translateX(-2px);
   }
 
   to {
+
     transform:
       rotate(.55deg)
       translateX(3px);
   }
+
 }
 
 
 @keyframes branchRight {
 
   from {
+
     transform:
       rotate(.35deg)
       translateX(2px);
   }
 
   to {
+
     transform:
       rotate(-.5deg)
       translateX(-3px);
   }
+
 }
 
 
@@ -251,6 +301,7 @@ body {
 ================================================== */
 
 .petals {
+
   position: absolute;
   inset: 0;
 
@@ -263,11 +314,13 @@ body {
 
 
 .petal {
+
   position: absolute;
 
   top: -12vh;
 
-  width: var(--size);
+  width:
+    var(--size);
 
   height:
     calc(var(--size) * 1.35);
@@ -276,16 +329,21 @@ body {
     80% 15% 75% 20%;
 
   background:
+
     radial-gradient(
       circle at 30% 25%,
+
       #fffaf7 0%,
+
       #ffdce7 50%,
+
       #e99aaf 100%
     );
 
   opacity: .78;
 
   box-shadow:
+
     0 0 4px
     rgba(255,222,231,.45);
 
@@ -301,6 +359,7 @@ body {
 @keyframes petalFall {
 
   0% {
+
     transform:
       translate(0,-8vh)
       rotate(0deg);
@@ -308,38 +367,53 @@ body {
     opacity: 0;
   }
 
+
   8% {
+
     opacity: .8;
   }
 
+
   50% {
+
     transform:
+
       translate(
         var(--half-drift),
         50vh
       )
+
       rotate(130deg);
   }
 
+
   100% {
+
     transform:
+
       translate(
         var(--drift),
         115vh
       )
+
       rotate(285deg);
 
     opacity: 0;
   }
+
 }
 
 
 /* ==================================================
-   永久活水層
-   門開 / 門關都一直運作
+   一體式動態水盆
+
+   ★ 這次不畫 CSS 水柱
+   ★ 直接播放 hsuan-water-basin.webp
+   ★ 門開門關都一直動
 ================================================== */
 
-.water-fx {
+.water-basin {
+
   position: absolute;
 
   left: 0;
@@ -352,548 +426,53 @@ body {
 
   pointer-events: none;
 
-  overflow: visible;
-
-  opacity: 1;
-
-  visibility: visible;
-}
-
-
-/* ==================================================
-   竹管水柱
-
-   方向：
-   右上 → 左下
-================================================== */
-
-.water-stream {
-  position: absolute;
+  object-fit: fill;
 
   /*
-    竹管口偏右上
+    淡化裁切邊緣，
+    讓它融入原背景。
   */
 
-  left: 78%;
-  top: 2%;
+  -webkit-mask-image:
 
-  width: 2.4%;
-  height: 56%;
-
-  /*
-    正角度往左下斜
-  */
-
-  transform:
-    rotate(27deg);
-
-  transform-origin:
-    top center;
-
-  border-radius:
-    999px;
-
-  background:
-    linear-gradient(
-      to right,
-
-      rgba(255,255,255,0),
-
-      rgba(225,247,255,.45) 16%,
-
-      rgba(255,255,255,.98) 48%,
-
-      rgba(196,234,249,.50) 73%,
-
-      rgba(255,255,255,0)
-    );
-
-  box-shadow:
-    0 0 3px rgba(240,252,255,.85),
-    0 0 7px rgba(210,240,255,.30);
-
-  opacity: .90;
-
-  mix-blend-mode:
-    screen;
-
-  will-change:
-    transform,
-    opacity;
-
-  animation:
-    streamPulse
-    .62s
-    ease-in-out
-    infinite alternate;
-}
-
-
-/* ==================================================
-   水柱內的流動亮點
-================================================== */
-
-.water-stream::before,
-.water-stream::after {
-
-  content: "";
-
-  position: absolute;
-
-  left: 50%;
-
-  width: 200%;
-  height: 19%;
-
-  transform:
-    translateX(-50%);
-
-  border-radius:
-    999px;
-
-  background:
-    linear-gradient(
-      to bottom,
-
-      transparent,
-
-      rgba(255,255,255,.98),
-
-      transparent
-    );
-
-  animation:
-    waterDropRun
-    .82s
-    linear
-    infinite;
-}
-
-
-.water-stream::before {
-  top: 4%;
-}
-
-
-.water-stream::after {
-  top: 38%;
-
-  animation-delay:
-    -.41s;
-}
-
-
-@keyframes streamPulse {
-
-  from {
-
-    opacity: .63;
-
-    transform:
-      rotate(27deg)
-      scaleX(.78);
-  }
-
-  to {
-
-    opacity: .98;
-
-    transform:
-      rotate(27deg)
-      scaleX(1.08);
-  }
-}
-
-
-@keyframes waterDropRun {
-
-  0% {
-
-    transform:
-      translate(-50%,-8px)
-      scaleY(.55);
-
-    opacity: 0;
-  }
-
-  18% {
-
-    opacity: .95;
-  }
-
-  100% {
-
-    transform:
-      translate(-50%,72px)
-      scaleY(1.45);
-
-    opacity: 0;
-  }
-}
-
-
-/* ==================================================
-   水缽水面
-================================================== */
-
-.water-surface {
-  position: absolute;
-
-  left: 5%;
-  top: 30%;
-
-  width: 88%;
-  height: 57%;
-
-  border-radius:
-    50%;
-
-  overflow:
-    hidden;
-
-  transform:
-    rotate(-4deg);
-
-  opacity: .82;
-
-  mix-blend-mode:
-    screen;
-
-  pointer-events:
-    none;
-}
-
-
-/* 水面反光 */
-.water-surface::before {
-
-  content: "";
-
-  position: absolute;
-  inset: 0;
-
-  border-radius:
-    inherit;
-
-  background:
-    linear-gradient(
-      108deg,
-
-      transparent 4%,
-
-      rgba(255,248,230,.10) 19%,
-
-      rgba(255,241,204,.26) 30%,
-
-      transparent 43%,
-
-      rgba(208,239,249,.19) 58%,
-
-      transparent 72%,
-
-      rgba(255,246,219,.18) 87%,
-
-      transparent
-    );
-
-  background-size:
-    240% 100%;
-
-  animation:
-    waterSurfaceMove
-    4.4s
-    linear
-    infinite;
-}
-
-
-/* 水面細波紋 */
-.water-surface::after {
-
-  content: "";
-
-  position: absolute;
-  inset: 0;
-
-  border-radius:
-    inherit;
-
-  background:
-    repeating-radial-gradient(
-      ellipse at 54% 52%,
-
-      rgba(240,250,255,.17)
-      0 1px,
-
-      transparent
-      2px 8px
-    );
-
-  opacity: .35;
-
-  animation:
-    tinyWaterMove
-    3s
-    ease-in-out
-    infinite alternate;
-}
-
-
-@keyframes waterSurfaceMove {
-
-  from {
-    background-position:
-      120% 0;
-  }
-
-  to {
-    background-position:
-      -120% 0;
-  }
-}
-
-
-@keyframes tinyWaterMove {
-
-  from {
-
-    transform:
-      translateX(-3%)
-      scaleX(1.01);
-
-    opacity: .22;
-  }
-
-  to {
-
-    transform:
-      translateX(4%)
-      scaleX(1.08);
-
-    opacity: .48;
-  }
-}
-
-
-/* ==================================================
-   落水點
-
-   配合斜水柱往左下移
-================================================== */
-
-.water-impact {
-  position: absolute;
-
-  left: 54%;
-  top: 60%;
-
-  width: 8%;
-
-  aspect-ratio: 1;
-
-  transform:
-    translate(-50%,-50%);
-
-  border-radius:
-    50%;
-
-  background:
     radial-gradient(
-      circle,
+      ellipse 72% 72%
+      at 62% 53%,
 
-      rgba(255,255,255,.95) 0%,
+      #000 55%,
 
-      rgba(221,244,251,.38) 29%,
+      rgba(0,0,0,.96) 70%,
 
-      transparent 70%
+      rgba(0,0,0,.55) 87%,
+
+      transparent 100%
     );
 
-  mix-blend-mode:
-    screen;
 
-  animation:
-    impactPulse
-    1s
-    ease-in-out
-    infinite;
-}
+  mask-image:
 
+    radial-gradient(
+      ellipse 72% 72%
+      at 62% 53%,
 
-@keyframes impactPulse {
+      #000 55%,
 
-  0%,
-  100% {
+      rgba(0,0,0,.96) 70%,
 
-    opacity: .35;
+      rgba(0,0,0,.55) 87%,
 
-    transform:
-      translate(-50%,-50%)
-      scale(.7);
-  }
-
-  50% {
-
-    opacity: .95;
-
-    transform:
-      translate(-50%,-50%)
-      scale(1.18);
-  }
-}
-
-
-/* ==================================================
-   三層漣漪
-================================================== */
-
-.ripple {
-  position: absolute;
-
-  left: 54%;
-  top: 62%;
-
-  width: 7%;
-  height: 3.2%;
-
-  transform:
-    translate(-50%,-50%)
-    scale(.2);
-
-  border:
-    1px solid
-    rgba(238,249,255,.65);
-
-  border-radius:
-    50%;
-
-  opacity: 0;
-
-  mix-blend-mode:
-    screen;
-
-  animation:
-    rippleSpread
-    2.5s
-    ease-out
-    infinite;
-}
-
-
-.ripple.r2 {
-  animation-delay:
-    -.84s;
-}
-
-
-.ripple.r3 {
-  animation-delay:
-    -1.68s;
-}
-
-
-@keyframes rippleSpread {
-
-  0% {
-
-    transform:
-      translate(-50%,-50%)
-      scale(.18);
-
-    opacity: 0;
-  }
-
-  12% {
-
-    opacity: .66;
-  }
-
-  65% {
-
-    opacity: .22;
-  }
-
-  100% {
-
-    transform:
-      translate(-50%,-50%)
-      scale(5);
-
-    opacity: 0;
-  }
-}
-
-
-/* ==================================================
-   金色水面流光
-================================================== */
-
-.water-glint {
-  position: absolute;
-
-  left: 8%;
-  top: 46%;
-
-  width: 84%;
-  height: 20%;
-
-  border-radius:
-    50%;
-
-  transform:
-    rotate(-4deg);
-
-  background:
-    linear-gradient(
-      105deg,
-
-      transparent 0%,
-
-      transparent 24%,
-
-      rgba(255,236,193,.18) 37%,
-
-      rgba(255,255,255,.42) 48%,
-
-      rgba(208,239,248,.17) 57%,
-
-      transparent 69%
+      transparent 100%
     );
 
-  background-size:
-    240% 100%;
-
-  opacity: .62;
-
-  mix-blend-mode:
-    screen;
-
-  animation:
-    glintMove
-    4.4s
-    linear
-    infinite;
-}
-
-
-@keyframes glintMove {
-
-  from {
-    background-position:
-      120% 0;
-  }
-
-  to {
-    background-position:
-      -120% 0;
-  }
 }
 
 
 /* ==================================================
-   大門操作區
+   大門按鈕
 ================================================== */
 
 .gate-button {
+
   position: absolute;
 
   z-index: 60;
@@ -905,6 +484,7 @@ body {
   height: 65%;
 
   border: 0;
+
   padding: 0;
 
   background:
@@ -940,6 +520,7 @@ body {
 ================================================== */
 
 .hint {
+
   position: absolute;
 
   left: 50%;
@@ -950,13 +531,12 @@ body {
 
   opacity: 0;
 
-  pointer-events:
-    none;
+  pointer-events: none;
 
-  white-space:
-    nowrap;
+  white-space: nowrap;
 
   font-size:
+
     clamp(
       16px,
       1.7vw,
@@ -967,6 +547,7 @@ body {
     .12em;
 
   text-shadow:
+
     0 2px 9px
     rgba(19,11,6,.95),
 
@@ -974,7 +555,9 @@ body {
     rgba(19,11,6,.9);
 
   transition:
+
     opacity .35s ease,
+
     transform .35s ease;
 }
 
@@ -993,6 +576,7 @@ and
     transform:
       translate(-50%,-50%);
   }
+
 }
 
 
@@ -1012,6 +596,7 @@ and
 ================================================== */
 
 .welcome-stage {
+
   position: absolute;
 
   z-index: 50;
@@ -1029,6 +614,7 @@ and
 
 
 .welcome-track {
+
   position: absolute;
 
   left: 0;
@@ -1042,6 +628,7 @@ and
   justify-content: center;
 
   gap:
+
     clamp(
       8px,
       1vw,
@@ -1079,11 +666,13 @@ and
       translate(100%,-50%);
   }
 
+
   30% {
 
     transform:
       translate(5%,-50%);
   }
+
 
   72% {
 
@@ -1091,29 +680,32 @@ and
       translate(-4%,-50%);
   }
 
+
   100% {
 
     transform:
       translate(-100%,-50%);
   }
+
 }
 
 
 .snail {
+
   width:
+
     clamp(
       55px,
       5.5vw,
       90px
     );
 
-  height:
-    auto;
+  height: auto;
 
-  flex:
-    none;
+  flex: none;
 
   filter:
+
     drop-shadow(
       0 3px 6px
       rgba(31,14,4,.45)
@@ -1122,20 +714,19 @@ and
 
 
 .message-box {
+
   display: flex;
 
-  flex-direction:
-    column;
+  flex-direction: column;
 
-  align-items:
-    flex-start;
+  align-items: flex-start;
 
-  justify-content:
-    center;
+  justify-content: center;
 }
 
 
 .message {
+
   margin: 0;
 
   opacity: 0;
@@ -1146,19 +737,25 @@ and
   color:
     #fff0c4;
 
-  white-space:
-    nowrap;
+  white-space: nowrap;
 
   text-shadow:
-    0 2px 4px #2d1608,
-    0 4px 15px #1a0b04,
-    0 0 20px rgba(217,157,77,.95);
+
+    0 2px 4px
+    #2d1608,
+
+    0 4px 15px
+    #1a0b04,
+
+    0 0 20px
+    rgba(217,157,77,.95);
 }
 
 
 .message.zh {
 
   font-size:
+
     clamp(
       16px,
       1.7vw,
@@ -1169,8 +766,7 @@ and
 
 .message.en {
 
-  margin-top:
-    3px;
+  margin-top: 3px;
 
   font-family:
     Baskerville,
@@ -1181,6 +777,7 @@ and
     italic;
 
   font-size:
+
     clamp(
       13px,
       1.2vw,
@@ -1209,6 +806,7 @@ and
       blur(14px);
   }
 
+
   18% {
 
     opacity: 1;
@@ -1216,6 +814,7 @@ and
     filter:
       blur(0);
   }
+
 
   66% {
 
@@ -1225,6 +824,7 @@ and
       blur(0);
   }
 
+
   100% {
 
     opacity: 0;
@@ -1232,6 +832,7 @@ and
     filter:
       blur(9px);
   }
+
 }
 
 
@@ -1265,6 +866,7 @@ and
   .snail {
 
     width:
+
       clamp(
         42px,
         11vw,
@@ -1276,6 +878,7 @@ and
   .message.zh {
 
     font-size:
+
       clamp(
         12px,
         3vw,
@@ -1290,6 +893,7 @@ and
   .message.en {
 
     font-size:
+
       clamp(
         10px,
         2.4vw,
@@ -1299,89 +903,79 @@ and
     white-space:
       normal;
   }
+
 }
 
 </style>
+
 </head>
 
 
 <body>
 
+
 <main
   class="scene"
   id="scene"
+  aria-label="ASD 蝸小宣的家入口"
 >
 
 
+  <!-- 背景 -->
+
   <div
     class="picture closed"
+    aria-hidden="true"
   ></div>
 
 
   <div
     class="picture opened"
+    aria-hidden="true"
   ></div>
 
 
   <div
     class="shade"
+    aria-hidden="true"
   ></div>
 
 
+  <!-- 櫻花 -->
+
   <div
     class="branch branch-left"
+    aria-hidden="true"
   ></div>
 
 
   <div
     class="branch branch-right"
+    aria-hidden="true"
   ></div>
 
+
+  <!-- 花瓣 -->
 
   <div
     class="petals"
     id="petals"
+    aria-hidden="true"
   ></div>
 
 
   <!-- ==================================================
-       永久活水
+       一體式動態水盆
   ================================================== -->
 
-  <div
-    class="water-fx"
-    id="waterFx"
+  <img
+    id="waterBasin"
+    class="water-basin"
+    src="hsuan-water-basin.webp"
+    alt=""
+    aria-hidden="true"
+    decoding="async"
   >
-
-    <span
-      class="water-stream"
-    ></span>
-
-    <span
-      class="water-surface"
-    ></span>
-
-    <span
-      class="water-glint"
-    ></span>
-
-    <span
-      class="water-impact"
-    ></span>
-
-    <span
-      class="ripple r1"
-    ></span>
-
-    <span
-      class="ripple r2"
-    ></span>
-
-    <span
-      class="ripple r3"
-    ></span>
-
-  </div>
 
 
   <!-- ==================================================
@@ -1392,6 +986,7 @@ and
     class="gate-button"
     id="gateButton"
     type="button"
+    aria-label="點三下打開大門"
   >
 
     <span
@@ -1404,11 +999,12 @@ and
 
 
   <!-- ==================================================
-       歡迎區
+       歡迎動畫
   ================================================== -->
 
   <div
     class="welcome-stage"
+    aria-hidden="true"
   >
 
     <div
@@ -1420,6 +1016,7 @@ and
         class="snail"
         src="hsuan-snail.png"
         alt=""
+        decoding="async"
         onerror="this.style.display='none'"
       >
 
@@ -1491,9 +1088,9 @@ const petalsLayer =
   );
 
 
-const waterFx =
+const waterBasin =
   document.getElementById(
-    "waterFx"
+    "waterBasin"
   );
 
 
@@ -1518,7 +1115,7 @@ let timers =
 
 
 /* ==================================================
-   原始圖片尺寸
+   原始大門圖尺寸
 ================================================== */
 
 const SOURCE_W =
@@ -1529,51 +1126,54 @@ const SOURCE_H =
   947;
 
 
-/*
-  精準框住：
+/* ==================================================
+   動態水盆素材是從這裡裁出來：
 
-  竹管出口
-  ↓
-  水柱
-  ↓
-  水缽
+   x 1200
+   y 620
+   寬 336
+   高 260
 
-*/
+   所以它可以直接對回原圖。
+================================================== */
 
-const WATER_BOX = {
+const WATER_CROP = {
 
-  x: 1235,
+  x: 1200,
 
-  y: 655,
+  y: 620,
 
-  width: 301,
+  width: 336,
 
-  height: 205
+  height: 260
 
 };
 
 
 /* ==================================================
-   水動畫對齊背景 cover
+   讓動態水盆永遠貼回原本的位置
+
+   background-size: cover
+   background-position: center
 ================================================== */
 
-function positionWater() {
+function positionWaterBasin() {
 
 
-  const width =
+  const viewW =
     scene.clientWidth;
 
 
-  const height =
+  const viewH =
     scene.clientHeight;
 
 
   const scale =
     Math.max(
 
-      width / SOURCE_W,
+      viewW / SOURCE_W,
 
-      height / SOURCE_H
+      viewH / SOURCE_H
 
     );
 
@@ -1592,7 +1192,7 @@ function positionWater() {
 
   const offsetX =
     (
-      width
+      viewW
       -
       renderedW
     )
@@ -1602,7 +1202,7 @@ function positionWater() {
 
   const offsetY =
     (
-      height
+      viewH
       -
       renderedH
     )
@@ -1610,11 +1210,11 @@ function positionWater() {
     2;
 
 
-  waterFx.style.left =
+  waterBasin.style.left =
     (
       offsetX
       +
-      WATER_BOX.x
+      WATER_CROP.x
       *
       scale
     )
@@ -1622,11 +1222,11 @@ function positionWater() {
     "px";
 
 
-  waterFx.style.top =
+  waterBasin.style.top =
     (
       offsetY
       +
-      WATER_BOX.y
+      WATER_CROP.y
       *
       scale
     )
@@ -1634,9 +1234,9 @@ function positionWater() {
     "px";
 
 
-  waterFx.style.width =
+  waterBasin.style.width =
     (
-      WATER_BOX.width
+      WATER_CROP.width
       *
       scale
     )
@@ -1644,9 +1244,9 @@ function positionWater() {
     "px";
 
 
-  waterFx.style.height =
+  waterBasin.style.height =
     (
-      WATER_BOX.height
+      WATER_CROP.height
       *
       scale
     )
@@ -1676,9 +1276,14 @@ function makePetals() {
     "yes";
 
 
+  /*
+    不要滿天花瓣，
+    保持少量。
+  */
+
   for (
     let i = 0;
-    i < 20;
+    i < 16;
     i++
   ) {
 
@@ -1698,7 +1303,7 @@ function makePetals() {
           .5
         )
         *
-        170
+        160
 
       );
 
@@ -1711,15 +1316,16 @@ function makePetals() {
       (
         i % 2
 
-        ? 3 + Math.random() * 25
+        ? 3 + Math.random() * 24
 
-        : 74 + Math.random() * 23
+        : 74 + Math.random() * 22
       )
       +
       "%";
 
 
     petal.style.setProperty(
+
       "--size",
 
       (
@@ -1727,59 +1333,68 @@ function makePetals() {
         +
         Math.random()
         *
-        6
+        5
       )
       .toFixed(1)
       +
       "px"
+
     );
 
 
     petal.style.setProperty(
+
       "--duration",
 
       (
-        10
+        11
         +
         Math.random()
         *
-        9
+        10
       )
       .toFixed(1)
       +
       "s"
+
     );
 
 
     petal.style.setProperty(
+
       "--delay",
 
       (
         -Math.random()
         *
-        18
+        20
       )
       .toFixed(1)
       +
       "s"
+
     );
 
 
     petal.style.setProperty(
+
       "--half-drift",
 
       drift / 2
       +
       "px"
+
     );
 
 
     petal.style.setProperty(
+
       "--drift",
 
       drift
       +
       "px"
+
     );
 
 
@@ -1793,7 +1408,7 @@ function makePetals() {
 
 
 /* ==================================================
-   歡迎詞
+   歡迎動畫
 ================================================== */
 
 function later(
@@ -1875,6 +1490,12 @@ function openGate() {
   );
 
 
+  gateButton.setAttribute(
+    "aria-label",
+    "點一下關上大門"
+  );
+
+
   scene.classList.add(
     "is-open"
   );
@@ -1882,6 +1503,11 @@ function openGate() {
 
   clearWelcome();
 
+
+  /*
+    開門後，
+    蝸小宣才開始慢慢爬。
+  */
 
   later(
     () => {
@@ -1896,7 +1522,7 @@ function openGate() {
 
 
   /*
-    中文
+    中文先出
   */
 
   later(
@@ -1951,6 +1577,12 @@ function closeGate() {
     "is-open"
   );
 
+
+  gateButton.setAttribute(
+    "aria-label",
+    "點三下打開大門"
+  );
+
 }
 
 
@@ -1991,7 +1623,7 @@ function activateGate() {
 
 
     hintTimer =
-      setTimeout(
+      window.setTimeout(
         () => {
 
           gateButton.classList.remove(
@@ -2014,7 +1646,7 @@ function activateGate() {
 
 
   resetTimer =
-    setTimeout(
+    window.setTimeout(
       () => {
 
         knocks =
@@ -2036,6 +1668,10 @@ function activateGate() {
 }
 
 
+/* ==================================================
+   滑鼠 / 手指
+================================================== */
+
 gateButton.addEventListener(
   "click",
   activateGate
@@ -2043,7 +1679,36 @@ gateButton.addEventListener(
 
 
 /* ==================================================
-   網頁啟動
+   預載
+================================================== */
+
+function preload() {
+
+
+  [
+    "hsuan-gate-open.png",
+    "hsuan-snail.png",
+    "hsuan-water-basin.webp"
+  ]
+  .forEach(
+    src => {
+
+
+      const image =
+        new Image();
+
+
+      image.src =
+        src;
+
+    }
+  );
+
+}
+
+
+/* ==================================================
+   啟動
 ================================================== */
 
 window.addEventListener(
@@ -2054,38 +1719,22 @@ window.addEventListener(
     makePetals();
 
 
-    positionWater();
+    positionWaterBasin();
 
 
-    [
-      "hsuan-gate-open.png",
-      "hsuan-snail.png"
-    ]
-    .forEach(
-      src => {
-
-
-        const image =
-          new Image();
-
-
-        image.src =
-          src;
-
-      }
-    );
+    preload();
 
   }
 );
 
 
 /* ==================================================
-   視窗尺寸改變
+   視窗改變
 ================================================== */
 
 window.addEventListener(
   "resize",
-  positionWater
+  positionWaterBasin
 );
 
 
@@ -2093,8 +1742,9 @@ window.addEventListener(
   "orientationchange",
   () => {
 
-    setTimeout(
-      positionWater,
+
+    window.setTimeout(
+      positionWaterBasin,
       180
     );
 
@@ -2111,7 +1761,7 @@ if (
 
   const observer =
     new ResizeObserver(
-      positionWater
+      positionWaterBasin
     );
 
 
@@ -2124,4 +1774,5 @@ if (
 </script>
 
 </body>
+
 </html>
