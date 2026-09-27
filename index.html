@@ -1,24 +1,39 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>ASD 蝸小宣｜HSUAN WORLD</title>
 
   <style>
+
+    /* =========================================================
+       HSUAN WORLD
+       ASD 蝸小宣的家｜入口完整版
+       ========================================================= */
+
+
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
     }
 
+
     html,
     body {
       width: 100%;
       height: 100%;
       overflow: hidden;
+
       background: #17130f;
+
       font-family:
         "Noto Sans TC",
         "PingFang TC",
@@ -26,245 +41,527 @@
         sans-serif;
     }
 
-    /* ===== HSUAN WORLD 大門場景 ===== */
+
+    body {
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+
+
+    /* =========================================================
+       01｜整個大門場景
+       ========================================================= */
+
 
     .gate-scene {
       position: relative;
+
       width: 100vw;
       height: 100vh;
 
-      background-image: url("hsuan-gate.png");
+      overflow: hidden;
+
+      background-image:
+        url("hsuan-gate.png");
+
       background-size: cover;
-      background-position: center;
+      background-position: center center;
       background-repeat: no-repeat;
 
-      cursor: default;
+      background-color: #17130f;
     }
 
-    /* 很淡的夜幕，讓文字比較容易閱讀 */
+
+
+    /*
+      很淡的暗角。
+      不遮住原本的大門畫面。
+    */
+
     .gate-scene::after {
       content: "";
+
       position: absolute;
       inset: 0;
 
       background:
         linear-gradient(
           to bottom,
-          rgba(0, 0, 0, 0.02),
-          rgba(0, 0, 0, 0.10)
+          rgba(0, 0, 0, 0.00),
+          rgba(0, 0, 0, 0.05)
         );
 
       pointer-events: none;
+
+      z-index: 4;
     }
 
-    /* ===== 大門互動區 ===== */
+
+
+    /* =========================================================
+       02｜開門後的畫面
+       ========================================================= */
+
+
+    .gate-open-scene {
+      position: absolute;
+      inset: 0;
+
+      background-image:
+        url("hsuan-gate-open.png");
+
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+
+      opacity: 0;
+
+      /*
+        稍微放大一點，
+        開門時縮回正常尺寸，
+        產生很輕微的景深感。
+      */
+
+      transform: scale(1.018);
+
+      transition:
+        opacity 1.7s ease,
+        transform 2.8s ease;
+
+      pointer-events: none;
+
+      z-index: 2;
+    }
+
+
+    .gate-open-scene.show {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+
+
+    /* =========================================================
+       03｜大門可點擊區域
+       ========================================================= */
+
 
     .gate-trigger {
       position: absolute;
 
       /*
-        這四個數字控制「可以點門」的範圍。
-        之後我們可以依你的螢幕再微調。
+        這四個數值控制「門」的感應範圍。
+        如果正式圖片門的位置有偏差，
+        之後只需要調這裡。
       */
 
       left: 32%;
       top: 18%;
-      width: 37%;
-      height: 66%;
 
-      z-index: 5;
+      width: 36%;
+      height: 65%;
 
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      z-index: 10;
 
       cursor: pointer;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      outline: none;
+
+      touch-action: manipulation;
+
+      -webkit-tap-highlight-color: transparent;
     }
 
-    /* ===== 要進來看看嗎？ ===== */
 
-    .invitation {
+
+    /*
+      鍵盤操作時才顯示淡淡邊框。
+      一般滑鼠不會看到。
+    */
+
+    .gate-trigger:focus-visible {
+      outline:
+        2px solid
+        rgba(255, 248, 225, 0.45);
+
+      outline-offset: -8px;
+
+      border-radius: 8px;
+    }
+
+
+
+    /* =========================================================
+       04｜「點三下打開大門」
+       ========================================================= */
+
+
+    .gate-instruction {
       position: absolute;
 
       left: 50%;
-      top: 48%;
-
-      transform: translate(-50%, -50%);
-
-      color: rgba(255, 250, 240, 0);
-
-      font-size: clamp(18px, 2vw, 30px);
-      font-weight: 400;
-      letter-spacing: 0.18em;
-
-      text-shadow:
-        0 2px 10px rgba(0, 0, 0, 0.7);
-
-      transition:
-        opacity 0.8s ease,
-        color 0.8s ease,
-        transform 0.8s ease;
-
-      opacity: 0;
-
-      white-space: nowrap;
-      pointer-events: none;
-    }
-
-    /* 滑鼠靠近大門才出現 */
-    .gate-trigger:hover .invitation {
-      opacity: 1;
-
-      color: rgba(255, 250, 240, 0.95);
+      top: 49%;
 
       transform:
         translate(-50%, -50%)
-        translateY(-6px);
-    }
+        translateY(5px);
 
-    /* ===== 小蝸牛提示 ===== */
+      color:
+        rgba(255, 250, 240, 0);
 
-    .snail-hint {
-      position: absolute;
+      font-size:
+        clamp(18px, 1.8vw, 29px);
 
-      left: 50%;
-      top: 56%;
+      font-weight: 400;
 
-      transform: translateX(-50%);
+      letter-spacing: 0.14em;
 
-      font-size: 28px;
+      white-space: nowrap;
+
+      text-align: center;
 
       opacity: 0;
 
-      transition:
-        opacity 0.8s ease,
-        transform 0.8s ease;
-
       pointer-events: none;
+
+      text-shadow:
+        0 2px 5px rgba(0, 0, 0, 0.90),
+        0 4px 16px rgba(0, 0, 0, 0.65);
+
+      transition:
+        opacity 0.55s ease,
+        color 0.55s ease,
+        transform 0.55s ease;
     }
 
-    .gate-trigger:hover .snail-hint {
-      opacity: 0.9;
 
-      transform:
-        translateX(-50%)
-        translateY(-4px);
-    }
 
-    /* ===== 點門後 ===== */
+    /*
+      電腦：
+      只有滑鼠真正移到門上才出現文字。
+    */
 
-    .gate-scene.entering {
-      animation: enterWorld 2.4s ease forwards;
-    }
+    @media (hover: hover) and (pointer: fine) {
 
-    @keyframes enterWorld {
+      .gate-trigger:hover .gate-instruction {
+        opacity: 1;
 
-      0% {
-        transform: scale(1);
-        filter: brightness(1);
+        color:
+          rgba(255, 250, 240, 0.97);
+
+        transform:
+          translate(-50%, -50%)
+          translateY(0);
       }
 
-      45% {
-        transform: scale(1.025);
-        filter: brightness(1.04);
+    }
+
+
+
+    /* =========================================================
+       05｜每點一次，大門非常輕微回應
+       ========================================================= */
+
+
+    .gate-scene.knock {
+      animation:
+        gateKnock 0.17s ease;
+    }
+
+
+    @keyframes gateKnock {
+
+      0% {
+        transform: translateX(0);
+      }
+
+      30% {
+        transform: translateX(-1px);
+      }
+
+      65% {
+        transform: translateX(1px);
       }
 
       100% {
-        transform: scale(1.12);
-        filter: brightness(0.45);
+        transform: translateX(0);
       }
+
     }
 
-    /* ===== 進入中的文字 ===== */
 
-    .enter-message {
+
+    /* =========================================================
+       06｜歡迎文字共同設定
+       ========================================================= */
+
+
+    .welcome-message {
       position: fixed;
 
       left: 50%;
       top: 50%;
 
-      transform: translate(-50%, -50%);
+      transform:
+        translate(-50%, -50%)
+        translateY(10px);
 
-      z-index: 20;
+      z-index: 30;
+
+      width: 90%;
 
       color: #fffaf0;
 
-      font-size: clamp(20px, 2.3vw, 34px);
-      letter-spacing: 0.2em;
+      text-align: center;
+
+      font-weight: 400;
 
       opacity: 0;
 
       pointer-events: none;
 
       text-shadow:
-        0 3px 15px rgba(0, 0, 0, 0.75);
+        0 3px 8px rgba(0, 0, 0, 0.90),
+        0 5px 20px rgba(0, 0, 0, 0.75);
     }
 
-    .enter-message.show {
-      animation: welcome 2.2s ease forwards;
+
+
+    /* =========================================================
+       07｜第一幕：
+           歡迎來到 ASD 蝸小宣的家
+       ========================================================= */
+
+
+    .welcome-chinese {
+      font-size:
+        clamp(23px, 2.6vw, 40px);
+
+      letter-spacing:
+        0.12em;
     }
 
-    @keyframes welcome {
+
+    .welcome-chinese.show {
+      animation:
+        welcomeChinese 2.5s ease forwards;
+    }
+
+
+    @keyframes welcomeChinese {
 
       0% {
         opacity: 0;
+
         transform:
           translate(-50%, -50%)
           translateY(10px);
       }
 
-      35% {
+      20% {
         opacity: 1;
+
+        transform:
+          translate(-50%, -50%)
+          translateY(0);
       }
 
-      75% {
+      70% {
         opacity: 1;
+
+        transform:
+          translate(-50%, -50%)
+          translateY(0);
       }
 
       100% {
         opacity: 0;
+
         transform:
           translate(-50%, -50%)
           translateY(-8px);
       }
+
     }
 
-    /* ===== 手機 ===== */
+
+
+    /* =========================================================
+       08｜第二幕：
+           WELCOME TO HSUAN WORLD
+       ========================================================= */
+
+
+    .welcome-english {
+      font-size:
+        clamp(21px, 2.4vw, 38px);
+
+      letter-spacing:
+        0.20em;
+    }
+
+
+    .welcome-english.show {
+      animation:
+        welcomeEnglish 2.3s ease forwards;
+    }
+
+
+    @keyframes welcomeEnglish {
+
+      0% {
+        opacity: 0;
+
+        transform:
+          translate(-50%, -50%)
+          translateY(10px);
+      }
+
+      20% {
+        opacity: 1;
+
+        transform:
+          translate(-50%, -50%)
+          translateY(0);
+      }
+
+      72% {
+        opacity: 1;
+
+        transform:
+          translate(-50%, -50%)
+          translateY(0);
+      }
+
+      100% {
+        opacity: 0;
+
+        transform:
+          translate(-50%, -50%)
+          translateY(-8px);
+      }
+
+    }
+
+
+
+    /* =========================================================
+       09｜手機 / iPad
+       ========================================================= */
+
 
     @media (max-width: 768px) {
 
-      .gate-scene {
-        background-position: 50% center;
+      .gate-scene,
+      .gate-open-scene {
+        background-position:
+          50% center;
       }
 
+
+      /*
+        行動裝置的大門點擊區域稍微放大，
+        比較容易點。
+      */
+
       .gate-trigger {
-        left: 20%;
+        left: 18%;
         top: 15%;
-        width: 60%;
+
+        width: 64%;
         height: 70%;
       }
 
-      /*
-        手機沒有 hover（游標懸停），
-        所以直接讓提示保持淡淡可見。
-      */
 
-      .invitation {
-        opacity: 0.88;
-        color: rgba(255, 250, 240, 0.95);
+      .gate-instruction {
         font-size: 18px;
+
+        /*
+          手機仍然不會常駐顯示。
+          第一次碰門後才由 JavaScript 顯示。
+        */
+
+        opacity: 0;
       }
 
-      .snail-hint {
-        opacity: 0.8;
+
+      .gate-instruction.touch-show {
+        opacity: 1;
+
+        color:
+          rgba(255, 250, 240, 0.97);
+
+        transform:
+          translate(-50%, -50%)
+          translateY(0);
       }
+
+
+      .welcome-chinese {
+        font-size:
+          clamp(21px, 5vw, 30px);
+
+        letter-spacing:
+          0.08em;
+      }
+
+
+      .welcome-english {
+        font-size:
+          clamp(19px, 4.5vw, 28px);
+
+        letter-spacing:
+          0.12em;
+      }
+
     }
+
+
+
+    /* =========================================================
+       10｜減少動態效果設定
+       ========================================================= */
+
+
+    @media (prefers-reduced-motion: reduce) {
+
+      .gate-scene.knock {
+        animation: none;
+      }
+
+
+      .gate-open-scene {
+        transform: none;
+
+        transition:
+          opacity 0.4s linear;
+      }
+
+
+      .gate-open-scene.show {
+        transform: none;
+      }
+
+    }
+
 
   </style>
 </head>
 
 
+
 <body>
+
+
+  <!-- =======================================================
+       01｜大門
+       ======================================================= -->
+
 
   <main
     class="gate-scene"
@@ -272,112 +569,573 @@
     aria-label="HSUAN WORLD 大門"
   >
 
+
+    <!--
+      開門後的圖片。
+      平常 opacity = 0，
+      第三次點擊後才會出現。
+    -->
+
+    <div
+      class="gate-open-scene"
+      id="gateOpenScene"
+      aria-hidden="true"
+    ></div>
+
+
+
+    <!--
+      大門透明互動區。
+    -->
+
     <div
       class="gate-trigger"
       id="gateTrigger"
       role="button"
       tabindex="0"
-      aria-label="進入 HSUAN WORLD"
+      aria-label="點三下打開大門"
     >
 
-      <div class="invitation">
-        要進來看看嗎？
+
+      <div
+        class="gate-instruction"
+        id="gateInstruction"
+      >
+        點三下打開大門
       </div>
 
-      <div class="snail-hint">
-        🐌
-      </div>
 
     </div>
+
 
   </main>
 
 
+
+  <!-- =======================================================
+       02｜第一幕歡迎詞
+       ======================================================= -->
+
+
   <div
-    class="enter-message"
-    id="enterMessage"
+    class="welcome-message welcome-chinese"
+    id="welcomeChinese"
+    aria-live="polite"
   >
-    歡迎來到 HSUAN WORLD
+    歡迎來到 ASD 蝸小宣的家
   </div>
+
+
+
+  <!-- =======================================================
+       03｜第二幕歡迎詞
+       ======================================================= -->
+
+
+  <div
+    class="welcome-message welcome-english"
+    id="welcomeEnglish"
+    aria-live="polite"
+  >
+    WELCOME TO HSUAN WORLD
+  </div>
+
 
 
   <script>
 
+
+    /* =========================================================
+       HSUAN WORLD
+       大門互動程式
+       ========================================================= */
+
+
+
     const gateScene =
       document.getElementById("gateScene");
+
 
     const gateTrigger =
       document.getElementById("gateTrigger");
 
-    const enterMessage =
-      document.getElementById("enterMessage");
+
+    const gateOpenScene =
+      document.getElementById("gateOpenScene");
 
 
-    function enterHsuanWorld() {
-
-      /*
-        防止訪客連點十次，
-        把蝸小宣家的門撞壞 🤣
-      */
-
-      if (gateScene.classList.contains("entering")) {
-        return;
-      }
-
-      gateScene.classList.add("entering");
-
-      enterMessage.classList.add("show");
+    const gateInstruction =
+      document.getElementById("gateInstruction");
 
 
-      /*
-        目前先停在大門動畫。
+    const welcomeChinese =
+      document.getElementById("welcomeChinese");
 
-        等下一階段庭院完成，
-        這裡會改成：
 
-        window.location.href = "home.html";
+    const welcomeEnglish =
+      document.getElementById("welcomeEnglish");
 
-        到時候才真正走進蝸小宣家。
-      */
 
-      setTimeout(() => {
 
-        gateScene.classList.remove("entering");
-        enterMessage.classList.remove("show");
+    /* =========================================================
+       01｜狀態
+       ========================================================= */
 
-      }, 2600);
+
+    let knockCount = 0;
+
+    let gateOpened = false;
+
+    let resetTimer = null;
+
+    let touchHintTimer = null;
+
+
+
+    /* =========================================================
+       02｜判斷是否沒有滑鼠 hover
+       ========================================================= */
+
+
+    function isTouchDevice() {
+
+      return window.matchMedia(
+        "(hover: none)"
+      ).matches;
 
     }
 
 
-    gateTrigger.addEventListener(
-      "click",
-      enterHsuanWorld
-    );
+
+    /* =========================================================
+       03｜背景預載開門圖片
+       ========================================================= */
 
 
     /*
-      鍵盤也可以用 Enter 或空白鍵進門
+      關門畫面已經開始顯示後，
+      再準備第二張開門圖片。
+
+      不需要訪客第三下才開始下載。
     */
+
+
+    function preloadOpenGate() {
+
+      const image = new Image();
+
+      image.src =
+        "hsuan-gate-open.png";
+
+    }
+
+
+
+    /*
+      等整個頁面完成後再開始。
+      不跟第一張大門圖搶第一時間。
+    */
+
+
+    window.addEventListener(
+      "load",
+      function() {
+
+        setTimeout(
+          preloadOpenGate,
+          600
+        );
+
+      }
+    );
+
+
+
+    /* =========================================================
+       04｜每敲一下門的視覺反應
+       ========================================================= */
+
+
+    function playKnockAnimation() {
+
+      gateScene.classList.remove(
+        "knock"
+      );
+
+
+      /*
+        讓瀏覽器重新計算一次，
+        所以每一下都能重新播放動畫。
+      */
+
+      void gateScene.offsetWidth;
+
+
+      gateScene.classList.add(
+        "knock"
+      );
+
+    }
+
+
+
+    /* =========================================================
+       05｜手機第一次碰門
+       ========================================================= */
+
+
+    function showTouchInstruction() {
+
+      if (!isTouchDevice()) {
+        return;
+      }
+
+
+      gateInstruction.classList.add(
+        "touch-show"
+      );
+
+
+      clearTimeout(
+        touchHintTimer
+      );
+
+
+      touchHintTimer =
+        setTimeout(
+          function() {
+
+            if (!gateOpened) {
+
+              gateInstruction.classList.remove(
+                "touch-show"
+              );
+
+            }
+
+          },
+          1800
+        );
+
+    }
+
+
+
+    /* =========================================================
+       06｜敲門
+       ========================================================= */
+
+
+    function knockOnGate() {
+
+
+      if (gateOpened) {
+        return;
+      }
+
+
+
+      /*
+        手機第一次點擊時，
+        同時出現操作提示。
+      */
+
+      showTouchInstruction();
+
+
+
+      /*
+        增加敲門次數。
+      */
+
+      knockCount++;
+
+
+
+      /*
+        每敲一下，
+        大門做極輕微反應。
+      */
+
+      playKnockAnimation();
+
+
+
+      /*
+        每次重新計算 3 秒。
+
+        如果點一下後放著超過 3 秒，
+        就重新從第一下開始。
+
+        這樣可以避免訪客上午點一下，
+        下午又點兩下，門突然自己開了。
+      */
+
+      clearTimeout(
+        resetTimer
+      );
+
+
+      resetTimer =
+        setTimeout(
+          function() {
+
+            if (!gateOpened) {
+
+              knockCount = 0;
+
+            }
+
+          },
+          3000
+        );
+
+
+
+      /*
+        第三下。
+      */
+
+      if (knockCount >= 3) {
+
+        openGate();
+
+      }
+
+    }
+
+
+
+    /* =========================================================
+       07｜開門
+       ========================================================= */
+
+
+    function openGate() {
+
+
+      if (gateOpened) {
+        return;
+      }
+
+
+      gateOpened = true;
+
+
+      clearTimeout(
+        resetTimer
+      );
+
+
+      clearTimeout(
+        touchHintTimer
+      );
+
+
+      /*
+        提示文字立刻消失。
+      */
+
+      gateInstruction.classList.remove(
+        "touch-show"
+      );
+
+
+      gateInstruction.style.opacity =
+        "0";
+
+
+
+      /*
+        取消大門互動。
+        避免第四、第五下繼續觸發。
+      */
+
+      gateTrigger.style.pointerEvents =
+        "none";
+
+
+
+      /*
+        第三下之後稍停一下，
+        像是真的有人在屋裡聽見敲門。
+      */
+
+      setTimeout(
+        function() {
+
+
+          /*
+            開門後畫面淡入。
+          */
+
+          gateOpenScene.classList.add(
+            "show"
+          );
+
+
+        },
+        400
+      );
+
+
+
+      /* =======================================================
+         08｜第一幕中文歡迎詞
+         ======================================================= */
+
+
+      /*
+        門開始打開後，
+        約 1.2 秒再出現中文。
+
+        這樣訪客先看得到
+        「門真的打開了」。
+      */
+
+
+      setTimeout(
+        function() {
+
+          welcomeChinese.classList.add(
+            "show"
+          );
+
+        },
+        1200
+      );
+
+
+
+      /*
+        中文動畫結束後整理 class。
+      */
+
+
+      setTimeout(
+        function() {
+
+          welcomeChinese.classList.remove(
+            "show"
+          );
+
+        },
+        3800
+      );
+
+
+
+      /* =======================================================
+         09｜第二幕英文品牌
+         ======================================================= */
+
+
+      /*
+        中文消失後，
+        才出現英文品牌名稱。
+      */
+
+
+      setTimeout(
+        function() {
+
+          welcomeEnglish.classList.add(
+            "show"
+          );
+
+        },
+        4000
+      );
+
+
+
+      /*
+        英文動畫結束。
+      */
+
+
+      setTimeout(
+        function() {
+
+          welcomeEnglish.classList.remove(
+            "show"
+          );
+
+        },
+        6400
+      );
+
+
+
+      /* =======================================================
+         10｜最後正式停留在庭院
+         ======================================================= */
+
+
+      setTimeout(
+        function() {
+
+          /*
+            敲門透明區完全移除。
+            後面這裡就可以開始放：
+            庭院、流水、櫻花、
+            房屋入口等互動區域。
+          */
+
+          gateTrigger.style.display =
+            "none";
+
+        },
+        6500
+      );
+
+    }
+
+
+
+    /* =========================================================
+       11｜滑鼠 / 手指操作
+       ========================================================= */
+
+
+    gateTrigger.addEventListener(
+      "click",
+      knockOnGate
+    );
+
+
+
+    /* =========================================================
+       12｜鍵盤操作
+       ========================================================= */
+
 
     gateTrigger.addEventListener(
       "keydown",
       function(event) {
+
 
         if (
           event.key === "Enter" ||
           event.key === " "
         ) {
 
+
           event.preventDefault();
-          enterHsuanWorld();
+
+
+          knockOnGate();
+
 
         }
 
       }
     );
 
+
   </script>
 
+
 </body>
+
 </html>
