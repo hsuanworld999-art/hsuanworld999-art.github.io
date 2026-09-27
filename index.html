@@ -17,6 +17,33 @@
     .scene.is-open .opened { opacity: 1; transform: scale(1); }
     .shade { position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to bottom, transparent 76%, rgba(12, 7, 4, .14)); }
 
+    /* 取門景上方的櫻花枝影輕輕搖動；邊緣漸層避免出現方形接縫。 */
+    .branch { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: .55; background: url("hsuan-gate.png") center / cover no-repeat; will-change: transform; }
+    .scene.is-open .branch { background-image: url("hsuan-gate-open.png"); }
+    .branch-left { transform-origin: 8% 4%; -webkit-mask-image: radial-gradient(ellipse 40% 28% at 8% 3%, #000 0%, transparent 95%); mask-image: radial-gradient(ellipse 40% 28% at 8% 3%, #000 0%, transparent 95%); animation: branchSwayLeft 8s ease-in-out infinite alternate; }
+    .branch-right { transform-origin: 92% 4%; -webkit-mask-image: radial-gradient(ellipse 38% 26% at 92% 3%, #000 0%, transparent 95%); mask-image: radial-gradient(ellipse 38% 26% at 92% 3%, #000 0%, transparent 95%); animation: branchSwayRight 9s ease-in-out infinite alternate; }
+    @keyframes branchSwayLeft { from { transform: rotate(-.35deg) translateX(-2px); } to { transform: rotate(.55deg) translateX(3px); } }
+    @keyframes branchSwayRight { from { transform: rotate(.4deg) translateX(2px); } to { transform: rotate(-.5deg) translateX(-3px); } }
+
+    .petals { position: absolute; inset: 0; z-index: 1; overflow: hidden; pointer-events: none; }
+    .petal { position: absolute; top: -12vh; width: var(--size); height: calc(var(--size) * 1.35); border-radius: 80% 15% 75% 20%; background: radial-gradient(circle at 30% 25%, #fffaf7 0%, #ffdce7 50%, #e99aaf 100%); opacity: .8; box-shadow: 0 0 4px rgba(255, 222, 231, .5); animation: petalFall var(--duration) linear var(--delay) infinite; }
+    @keyframes petalFall { 0% { transform: translate(0, -8vh) rotate(0deg); opacity: 0; } 8% { opacity: .8; } 50% { transform: translate(var(--half-drift), 50vh) rotate(130deg); } 90% { opacity: .75; } 100% { transform: translate(var(--drift), 115vh) rotate(285deg); opacity: 0; } }
+
+    /* 漣漪只在開門後的庭院水面出現。 */
+    .pond-effects { position: absolute; inset: 0; z-index: 1; opacity: 0; transition: opacity 1s ease; pointer-events: none; }
+    .scene.is-open .pond-effects { opacity: 1; }
+    .ripple { position: absolute; width: clamp(55px, 9vw, 150px); height: clamp(13px, 2.1vw, 32px); border: 1.5px solid rgba(245, 253, 250, .62); border-radius: 50%; box-shadow: 0 0 8px rgba(202, 244, 237, .42), inset 0 0 5px rgba(255, 255, 255, .3); transform: translate(-50%, -50%) scale(.3); opacity: 0; animation: rippleExpand 4.8s ease-out infinite; }
+    .ripple.one { left: 47%; top: 55%; }
+    .ripple.two { left: 54%; top: 58%; animation-delay: -1.6s; }
+    .ripple.three { left: 50%; top: 61%; animation-delay: -3.2s; }
+    @keyframes rippleExpand { 0% { transform: translate(-50%, -50%) scale(.3); opacity: 0; } 20% { opacity: .58; } 100% { transform: translate(-50%, -50%) scale(1.9); opacity: 0; } }
+    .water-sheen { position: absolute; left: 41%; top: 54%; width: 20%; height: 9%; border-radius: 50%; background: repeating-linear-gradient(165deg, transparent 0 14px, rgba(220, 255, 251, .13) 16px, transparent 21px); opacity: .45; filter: blur(2px); animation: flow 6s linear infinite; }
+    @keyframes flow { from { background-position: 0 0; } to { background-position: 90px 38px; } }
+
+    .sound-button { position: absolute; z-index: 6; right: max(14px, env(safe-area-inset-right)); bottom: max(18px, env(safe-area-inset-bottom)); padding: 9px 13px; border: 1px solid rgba(255, 238, 197, .65); border-radius: 999px; background: rgba(38, 22, 13, .7); color: #fff2d4; font: 14px/1.2 sans-serif; cursor: pointer; opacity: 0; visibility: hidden; transition: opacity .4s ease; }
+    .scene.is-open .sound-button { opacity: 1; visibility: visible; }
+    .sound-button:focus-visible { outline: 2px solid #fff4d2; outline-offset: 3px; }
+
     /* 關門時感應中間的門；開門後入口整個畫面都可點一下關門。 */
     .gate-button { position: absolute; z-index: 3; left: 32%; top: 18%; width: 36%; height: 65%; padding: 0; border: 0; background: transparent; color: #fff8e7; cursor: pointer; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
     .scene.is-open .gate-button { left: 0; top: 0; width: 100%; height: 100%; }
@@ -28,10 +55,10 @@
     /* 文字只在兩片門中間的開口顯示，超出開口就裁掉。 */
     .welcome-stage { position: absolute; z-index: 2; left: 24%; top: 22%; width: 52%; height: 38%; overflow: hidden; pointer-events: none; }
     .welcome-track { position: absolute; top: 50%; left: 0; display: flex; align-items: center; justify-content: center; gap: clamp(9px, 1vw, 16px); width: 100%; pointer-events: none; opacity: 0; visibility: hidden; transform: translate(100%, -50%); }
-    .welcome-track.running { visibility: visible; opacity: 1; animation: crawl 11s linear both; }
+    .welcome-track.running { visibility: visible; opacity: 1; animation: crawl 18s linear both; }
     @keyframes crawl {
       0% { transform: translate(100%, -50%); }
-      21% { transform: translate(3%, -50%); }
+      30% { transform: translate(3%, -50%); }
       72% { transform: translate(-3%, -50%); }
       100% { transform: translate(-100%, -50%); }
     }
@@ -55,6 +82,9 @@
       .scene.is-open .opened { transform: none; }
       .welcome-track.running { animation: none; transform: translate(0, -50%); }
       .message.reveal { animation: mist 7s ease-in-out both; }
+      .branch, .petal, .ripple, .water-sheen { animation: none; }
+      .petal { display: none; }
+      .ripple { opacity: 0; }
     }
   </style>
 </head>
@@ -63,9 +93,17 @@
     <div class="picture closed" aria-hidden="true"></div>
     <div class="picture opened" aria-hidden="true"></div>
     <div class="shade" aria-hidden="true"></div>
+    <div class="branch branch-left" aria-hidden="true"></div>
+    <div class="branch branch-right" aria-hidden="true"></div>
+    <div class="petals" id="petals" aria-hidden="true"></div>
+    <div class="pond-effects" aria-hidden="true">
+      <div class="water-sheen"></div>
+      <div class="ripple one"></div><div class="ripple two"></div><div class="ripple three"></div>
+    </div>
     <button class="gate-button" id="gateButton" type="button" aria-label="點三下打開大門">
       <span class="hint" id="hint">點三下打開大門</span>
     </button>
+    <button class="sound-button" id="soundButton" type="button" aria-label="關閉流水聲" aria-pressed="true">🔊 水聲</button>
     <div class="welcome-stage" aria-hidden="true">
       <div class="welcome-track" id="welcomeTrack">
         <img class="snail" src="hsuan-snail.png" alt="" decoding="async">
@@ -82,15 +120,77 @@
     const track = document.getElementById('welcomeTrack');
     const zh = document.getElementById('zh');
     const en = document.getElementById('en');
+    const soundButton = document.getElementById('soundButton');
     const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
     let opened = false;
     let knocks = 0;
     let resetTimer;
     let hintTimer;
     let timers = [];
+    let soundEnabled = true;
+    let audioContext, waterSource, waterGain;
 
+    /* 花瓣分散從兩側櫻花枝飄落，不阻擋點門。 */
+    const petalLayer = document.getElementById('petals');
+    for (let i = 0; i < 26; i++) {
+      const petal = document.createElement('span');
+      const drift = Math.round((Math.random() - .5) * 180);
+      petal.className = 'petal';
+      petal.style.left = (i % 2 ? 2 + Math.random() * 27 : 72 + Math.random() * 27) + '%';
+      petal.style.setProperty('--size', (5 + Math.random() * 6).toFixed(1) + 'px');
+      petal.style.setProperty('--duration', (9 + Math.random() * 9).toFixed(1) + 's');
+      petal.style.setProperty('--delay', (-Math.random() * 18).toFixed(1) + 's');
+      petal.style.setProperty('--half-drift', (drift / 2) + 'px');
+      petal.style.setProperty('--drift', drift + 'px');
+      petalLayer.appendChild(petal);
+    }
+
+    /* 以柔和的濾波雜音合成水流聲；瀏覽器允許點門後播放。 */
+    function startWater() {
+      if (!soundEnabled) return;
+      const AudioContextType = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContextType) return;
+      try {
+        audioContext ||= new AudioContextType();
+        audioContext.resume();
+        if (waterSource) return;
+        const rate = audioContext.sampleRate;
+        const buffer = audioContext.createBuffer(1, rate * 3, rate);
+        const data = buffer.getChannelData(0);
+        for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+        waterSource = audioContext.createBufferSource();
+        waterSource.buffer = buffer;
+        waterSource.loop = true;
+        const highpass = audioContext.createBiquadFilter();
+        highpass.type = 'highpass'; highpass.frequency.value = 110;
+        const lowpass = audioContext.createBiquadFilter();
+        lowpass.type = 'lowpass'; lowpass.frequency.value = 620;
+        waterGain = audioContext.createGain();
+        waterGain.gain.setValueAtTime(0, audioContext.currentTime);
+        waterGain.gain.linearRampToValueAtTime(.035, audioContext.currentTime + 1.6);
+        waterSource.connect(highpass).connect(lowpass).connect(waterGain).connect(audioContext.destination);
+        waterSource.start();
+      } catch (error) { /* 聲音不可用時，畫面仍可正常開門。 */ }
+    }
+    function stopWater() {
+      if (!waterSource || !audioContext) return;
+      const source = waterSource;
+      waterSource = null;
+      const now = audioContext.currentTime;
+      waterGain.gain.cancelScheduledValues(now);
+      waterGain.gain.setValueAtTime(waterGain.gain.value, now);
+      waterGain.gain.linearRampToValueAtTime(0, now + .45);
+      source.stop(now + .5);
+    }
+    soundButton.addEventListener('click', event => {
+      event.stopPropagation();
+      soundEnabled = !soundEnabled;
+      soundButton.textContent = soundEnabled ? '🔊 水聲' : '🔇 水聲';
+      soundButton.setAttribute('aria-label', soundEnabled ? '關閉流水聲' : '開啟流水聲');
+      soundButton.setAttribute('aria-pressed', String(soundEnabled));
+      if (soundEnabled && opened) startWater(); else stopWater();
+    });
     function later(fn, delay) { timers.push(window.setTimeout(fn, delay)); }
-
     function clearWelcome() {
       timers.forEach(window.clearTimeout);
       timers = [];
@@ -99,17 +199,17 @@
       en.classList.remove('reveal');
       void track.offsetWidth;
     }
-
     function closeGate() {
       opened = false;
+      stopWater();
       knocks = 0;
       clearWelcome();
       scene.classList.remove('is-open');
       gateButton.setAttribute('aria-label', '點三下打開大門');
     }
-
     function openGate() {
       opened = true;
+      startWater();
       knocks = 0;
       clearTimeout(resetTimer);
       clearTimeout(hintTimer);
@@ -121,9 +221,8 @@
       later(() => {
         zh.classList.add('reveal');
         en.classList.add('reveal');
-      }, 3500);
+      }, 5900);
     }
-
     function activateGate() {
       if (opened) { closeGate(); return; }
       if (window.matchMedia('(hover: none)').matches) {
@@ -136,13 +235,15 @@
       resetTimer = window.setTimeout(() => { knocks = 0; }, 3000);
       if (knocks >= 3) openGate();
     }
-
     gateButton.addEventListener('click', activateGate);
 
     /* 背景圖在首頁載入後預先下載，避免第三下才開始等圖片。 */
     window.addEventListener('load', () => {
       window.setTimeout(() => {
-        ['hsuan-gate-open.png', 'hsuan-snail.png'].forEach(src => { const image = new Image(); image.src = src; });
+        ['hsuan-gate-open.png', 'hsuan-snail.png'].forEach(src => {
+          const image = new Image();
+          image.src = src;
+        });
       }, 400);
     });
     motion.addEventListener?.('change', () => { if (opened) closeGate(); });
