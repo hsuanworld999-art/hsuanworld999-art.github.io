@@ -79,8 +79,7 @@
 
     /*
       櫻花樹與屋頂保持靜止。
-      不再複製整張圖片來搖動樹枝，避免屋頂重影、失真。
-      下面只有兩片獨立花瓣會偶爾飄落。
+      不複製整張圖片來搖動樹枝，避免屋頂重影。
     */
     .petal {
       position: absolute;
@@ -127,10 +126,7 @@
       }
     }
 
-    /*
-      動態流水素材始終顯示。
-      開門、關門都不切換或隱藏這一層。
-    */
+    /* 動態流水素材在開門與關門時都持續顯示。 */
     .water-basin {
       position: absolute;
       z-index: 7;
@@ -237,6 +233,107 @@
 
     .scene:not(.is-open) .gate-button.touch-hint .hint {
       opacity: 1;
+    }
+
+    /*
+      右側「宣的世界」木牌。
+      滑鼠移入時顯示「關於我」；手機直接顯示。
+    */
+    .about-link {
+      position: absolute;
+      z-index: 40;
+      left: 75.5%;
+      top: 35.5%;
+      width: 17%;
+      height: 18%;
+      display: grid;
+      place-items: center;
+      text-decoration: none;
+      color: #fff4d7;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .about-link span {
+      padding: 8px 17px;
+      border-radius: 999px;
+      background: rgba(38, 19, 8, .8);
+      border: 1px solid rgba(255, 233, 187, .65);
+      box-shadow: 0 3px 12px rgba(25, 11, 3, .45);
+      font-size: 25px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateY(6px);
+      transition: opacity .25s ease, transform .25s ease;
+    }
+
+    .about-link:hover span,
+    .about-link:focus-visible span {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .about-link:focus-visible {
+      outline: 2px solid #fff4d7;
+      outline-offset: -4px;
+    }
+
+    @media (hover: none) {
+      .about-link span {
+        opacity: 1;
+        transform: none;
+        font-size: 19px;
+      }
+    }
+
+    /* 點選「關於我」後顯示暫無資料畫面。 */
+    .about-panel {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      padding: 24px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(25, 14, 9, .72);
+    }
+
+    .about-panel:target {
+      display: flex;
+    }
+
+    .about-card {
+      position: relative;
+      width: min(440px, 100%);
+      padding: 48px 32px 42px;
+      border: 1px solid #d6ae78;
+      border-radius: 18px;
+      background: #382519;
+      color: #fff2dc;
+      text-align: center;
+      box-shadow: 0 16px 55px rgba(0, 0, 0, .45);
+    }
+
+    .about-card h1 {
+      margin: 0 0 20px;
+      font-size: 29px;
+    }
+
+    .about-card p {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .about-close {
+      position: absolute;
+      right: 14px;
+      top: 9px;
+      padding: 4px 10px;
+      color: #fff2dc;
+      text-decoration: none;
+      font-size: 30px;
     }
 
     /* 歡迎詞固定在兩扇門的中間。 */
@@ -414,8 +511,28 @@
       >
         <span class="hint">點三下打開大門</span>
       </button>
+
+      <a
+        class="about-link"
+        href="#about"
+        aria-label="關於我"
+      >
+        <span>關於我</span>
+      </a>
     </div>
   </main>
+
+  <section
+    class="about-panel"
+    id="about"
+    aria-labelledby="aboutTitle"
+  >
+    <div class="about-card">
+      <a class="about-close" href="#" aria-label="關閉關於我">×</a>
+      <h1 id="aboutTitle">關於我</h1>
+      <p>暫時沒有資料</p>
+    </div>
+  </section>
 
   <script>
     const scene = document.getElementById('scene');
