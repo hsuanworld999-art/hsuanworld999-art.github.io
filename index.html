@@ -15,26 +15,13 @@
     .cherry { z-index: 6; }
 
     .address {
-      position: absolute;
-      left: 116px;
-      top: 402px;
-      width: 136px;
-      height: 87px;
-      z-index: 5;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 1px;
-      color: #f6cf97;
+      position: absolute; left: 116px; top: 402px; width: 136px; height: 87px;
+      z-index: 5; display: flex; flex-direction: column; align-items: center;
+      justify-content: center; gap: 1px; color: #f6cf97;
       background: linear-gradient(135deg, #302017, #1b120f 60%, #392318);
       font-family: "Songti TC", "Noto Serif TC", "PMingLiU", serif;
-      font-size: 19px;
-      font-weight: 700;
-      line-height: 1.32;
-      letter-spacing: .02em;
-      text-align: center;
-      text-shadow: 0 1px 3px #000;
+      font-size: 19px; font-weight: 700; line-height: 1.32;
+      letter-spacing: .02em; text-align: center; text-shadow: 0 1px 3px #000;
       pointer-events: none;
     }
     .address span { white-space: nowrap; }
@@ -46,7 +33,6 @@
     .leaf.right { right: 0; transform-origin: 100% 50%; background-position: -766px -215px; }
     #stage.open .leaf.left { transform: rotateY(-83deg); filter: brightness(.72); }
     #stage.open .leaf.right { transform: rotateY(83deg); filter: brightness(.72); }
-
     .gate-hit { position: absolute; left: 398px; top: 203px; width: 736px; height: 578px; z-index: 7; border: 0; background: transparent; cursor: pointer; color: transparent; }
     .gate-hit:focus-visible, .about:focus-visible { outline: 4px solid #fff; outline-offset: -5px; }
     .water-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
@@ -91,74 +77,49 @@
     .about { position: absolute; left: 1257px; top: 361px; width: 278px; height: 133px; z-index: 9; border: 0; background: transparent; cursor: pointer; color: #fff; }
     .about span { display: inline-block; padding: 9px 18px; border-radius: 18px; background: #33201ddc; opacity: 0; transform: translateY(7px); transition: .2s; font-size: 23px; }
     .about:hover span, .about:focus-visible span { opacity: 1; transform: translateY(0); }
-
     .hint { position: absolute; bottom: 27px; left: 50%; z-index: 9; transform: translateX(-50%); opacity: 0; color: #fff8ec; background: #211818bd; border-radius: 999px; padding: 9px 20px; font-size: 18px; letter-spacing: .08em; white-space: nowrap; pointer-events: none; transition: opacity .4s; }
     #stage.show-hint:not(.open) .hint { opacity: 1; }
     #stage.open .hint { opacity: 0; }
 
     .enter {
-      position: absolute;
-      left: 679px;
-      top: 713px;
-      width: 260px;
-      z-index: 10;
-      border: 1px solid #ffedc3;
-      border-radius: 999px;
-      padding: 13px 22px;
-      background: #2b1918db;
-      color: #fff5dc;
-      font-size: 24px;
-      letter-spacing: .12em;
-      cursor: pointer;
-      opacity: 0;
-      visibility: hidden;
+      position: absolute; left: 679px; top: 713px; width: 260px; z-index: 10;
+      border: 1px solid #ffedc3; border-radius: 999px; padding: 13px 22px;
+      background: #2b1918db; color: #fff5dc; font-size: 24px;
+      letter-spacing: .12em; cursor: pointer; opacity: 0; visibility: hidden;
       transform: translateY(12px);
       transition: opacity .5s, transform .5s, visibility 0s .5s;
     }
     #stage.open:not(.inside) .enter {
-      opacity: 1;
-      visibility: visible;
-      transform: translateY(0);
+      opacity: 1; visibility: visible; transform: translateY(0);
       transition-delay: 2.2s, 2.2s, 0s;
     }
     .enter:hover, .enter:focus-visible { background: #5a3026f0; outline: 3px solid #fff2cf; }
 
     .house-view {
-      position: absolute;
-      inset: 0;
-      z-index: 12;
-      background: #241916;
-      opacity: 0;
-      visibility: hidden;
+      position: absolute; inset: 0; z-index: 12; background: #241916;
+      opacity: 0; visibility: hidden;
       transition: opacity 1.35s ease, visibility 0s 1.35s;
     }
     #stage.inside .house-view {
-      opacity: 1;
-      visibility: visible;
+      opacity: 1; visibility: visible;
       transition: opacity 1.35s ease, visibility 0s;
     }
-    .house-view img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      transform: scale(1.045);
+    .house-art {
+      position: absolute; left: 50%; top: 50%; height: 100%;
+      aspect-ratio: 1597 / 985;
+      transform: translate(-50%, -50%) scale(1.045);
       transition: transform 2.1s ease-out;
     }
-    #stage.inside .house-view img { transform: scale(1); }
+    #stage.inside .house-art { transform: translate(-50%, -50%) scale(1); }
+    .house-art img, .house-water {
+      display: block; position: absolute; inset: 0; width: 100%; height: 100%;
+    }
+    .house-water { pointer-events: none; mix-blend-mode: screen; }
     .back {
-      position: absolute;
-      top: 32px;
-      left: 50%;
-      transform: translateX(-50%);
-      padding: 12px 22px;
-      border: 1px solid #ffe9bc;
-      border-radius: 999px;
-      color: #fff7e9;
-      background: #281918dc;
-      font-size: 22px;
-      white-space: nowrap;
-      cursor: pointer;
+      position: absolute; top: 32px; left: 50%; transform: translateX(-50%);
+      padding: 12px 22px; border: 1px solid #ffe9bc; border-radius: 999px;
+      color: #fff7e9; background: #281918dc; font-size: 22px;
+      white-space: nowrap; cursor: pointer;
     }
     .back:hover, .back:focus-visible { background: #593123; outline: 3px solid #fff2cf; }
 
@@ -167,7 +128,7 @@
     dialog button { padding: 8px 18px; border: 1px solid #d5b08b; border-radius: 9px; background: #503431; color: white; cursor: pointer; }
 
     @media (prefers-reduced-motion: reduce) {
-      .leaf, .welcome, .house-view, .house-view img { transition-duration: .01ms; }
+      .leaf, .welcome, .house-view, .house-art { transition-duration: .01ms; }
       .petal { animation: none; }
       #stage.open .snail { animation: none; opacity: 1; }
       #stage.open .welcome .zh { animation: none; opacity: 1; filter: none; }
@@ -204,7 +165,10 @@
     <button class="enter" type="button">走進庭院</button>
 
     <section class="house-view" aria-label="宣的世界庭院與房屋">
-      <img src="house-correct-sign.png" alt="石板路通往木造房屋，右側蓮花池裡有小青蛙，入口內亮著螺紋蝸牛殼燈">
+      <div class="house-art">
+        <img src="house-correct-sign.png" alt="石板路通往木造房屋，右側蓮花池裡有小青蛙，入口內亮著螺紋蝸牛殼燈">
+        <canvas class="house-water" width="1597" height="985" aria-hidden="true"></canvas>
+      </div>
       <button class="back" type="button">← 返回大門</button>
     </section>
   </main>
@@ -260,6 +224,7 @@
     about.addEventListener('click', () => dialog.showModal());
     enter.addEventListener('click', () => {
       stage.classList.add('inside');
+      startPond();
       back.focus();
     });
     back.addEventListener('click', () => {
@@ -275,8 +240,56 @@
     const canvas = document.querySelector('#water-canvas');
     const ctx = canvas.getContext('2d');
     const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
-    let waterStarted = false, previousFrame = 0;
 
+    const pond = document.querySelector('.house-water');
+    const pondCtx = pond.getContext('2d');
+    let pondActive = false, previousPondFrame = 0;
+
+    function drawPond(time) {
+      if (!stage.classList.contains('inside') || reducedMotion.matches) {
+        pondCtx.clearRect(0, 0, pond.width, pond.height);
+        pondActive = false;
+        return;
+      }
+      requestAnimationFrame(drawPond);
+      if (time - previousPondFrame < 33) return;
+      previousPondFrame = time;
+      pondCtx.clearRect(0, 0, pond.width, pond.height);
+      const seconds = time / 1000;
+
+      // 三處緩慢擴散的漣漪。
+      const spots = [[1107, 824, 0], [1186, 911, .42], [1450, 811, .72]];
+      for (const [x, y, offset] of spots) {
+        for (let i = 0; i < 3; i++) {
+          const phase = (seconds * .34 + offset + i / 3) % 1;
+          const radius = 5 + phase * 47;
+          pondCtx.strokeStyle = `rgba(255,230,185,${.49 * (1 - phase)})`;
+          pondCtx.lineWidth = 1.5 - phase * .55;
+          pondCtx.beginPath();
+          pondCtx.ellipse(x, y, radius, radius * .27, -.08, .12, Math.PI * 1.9);
+          pondCtx.stroke();
+        }
+      }
+
+      // 隨時間移動的細小水面反光。
+      for (let i = 0; i < 14; i++) {
+        const x = 1030 + (i * 41) % 530 + Math.sin(seconds * .9 + i) * 9;
+        const y = 844 + (i * 37) % 102;
+        const shimmer = Math.max(0, Math.sin(seconds * 2.3 + i * 1.8));
+        pondCtx.fillStyle = `rgba(255,221,163,${.24 * shimmer})`;
+        pondCtx.beginPath();
+        pondCtx.ellipse(x, y, 3 + shimmer * 4, .8, -.1, 0, Math.PI * 2);
+        pondCtx.fill();
+      }
+    }
+
+    function startPond() {
+      if (!pondCtx || pondActive || reducedMotion.matches) return;
+      pondActive = true;
+      requestAnimationFrame(drawPond);
+    }
+
+    let waterStarted = false, previousFrame = 0;
     function drawWater(time) {
       if (reducedMotion.matches) {
         ctx.clearRect(0, 0, 1672, 941);
@@ -294,7 +307,6 @@
       ctx.ellipse(1534, 772, 77, 14, -0.035, 0, Math.PI * 2);
       ctx.clip();
       ctx.globalAlpha = 0.97;
-
       for (let y = 755; y < 790; y += 2) {
         const horizontal =
           Math.sin(y * .29 + seconds * 3.1) * 4.4 +
@@ -303,8 +315,8 @@
         ctx.drawImage(scene, 1448 + horizontal, y + vertical, 174, 2.4,
           1448, y, 174, 2.4);
       }
-
       ctx.globalAlpha = 1;
+
       for (let i = 0; i < 7; i++) {
         const x = 1460 + i * 23 + Math.sin(seconds * 2.4 + i * 2) * 11;
         const y = 769 + Math.sin(seconds * 3.2 + i * 2.3) * 5;
@@ -341,7 +353,6 @@
       ctx.strokeStyle = stream;
       ctx.lineWidth = 7;
       ctx.beginPath();
-
       for (let j = 0; j <= 24; j++) {
         const p = j / 24;
         if (j === 0) ctx.moveTo(waterX(p), waterY(p));
