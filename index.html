@@ -39,7 +39,7 @@
     .scene { z-index: 0; }
     .cherry { z-index: 6; }
 
-    /* 蓋住圖片中的錯字，保留門牌外框與上方徽章。 */
+    /* 覆蓋底圖門牌中的錯字，保留原有外框與徽章。 */
     .address {
       position: absolute;
       left: 116px;
@@ -54,16 +54,10 @@
       gap: 1px;
       color: #f6cf97;
       background: linear-gradient(
-        135deg,
-        #302017,
-        #1b120f 60%,
-        #392318
+        135deg, #302017, #1b120f 60%, #392318
       );
       font-family:
-        "Songti TC",
-        "Noto Serif TC",
-        "PMingLiU",
-        serif;
+        "Songti TC", "Noto Serif TC", "PMingLiU", serif;
       font-size: 19px;
       font-weight: 700;
       line-height: 1.32;
@@ -136,29 +130,32 @@
       cursor: pointer;
       color: transparent;
     }
-    .gate-hit:focus-visible, .about:focus-visible {
+    .gate-hit:focus-visible,
+    .about:focus-visible {
       outline: 4px solid #fff;
       outline-offset: -5px;
     }
 
-    /* 舊水流圖含竹管；只顯示流動水柱與水面。 */
+    /*
+      動態素材原本也帶有竹管和水盆。
+      只露出流動水柱，避免出現第二個水盆。
+    */
     .water {
       position: absolute;
-      left: 1381px;
-      top: 654px;
+      left: 1360px;
+      top: 594px;
       width: 291px;
       height: 281px;
       object-fit: contain;
       clip-path: polygon(
         59% 25%, 68% 25%,
-        69% 52%, 85% 56%,
-        85% 73%, 28% 73%,
-        28% 56%, 59% 52%
+        68% 70%, 59% 70%
       );
       z-index: 4;
       pointer-events: none;
     }
-    .water[hidden], .snail[hidden] { display: none; }
+    .water[hidden],
+    .snail[hidden] { display: none; }
 
     .petal {
       position: absolute;
@@ -210,7 +207,9 @@
       color: #fff4df;
       opacity: 0;
       transform: translateY(15px);
-      transition: opacity .7s .55s, transform .7s .55s;
+      transition:
+        opacity .7s .55s,
+        transform .7s .55s;
       pointer-events: none;
       text-shadow:
         0 3px 12px #25100d,
@@ -223,10 +222,7 @@
     .welcome strong {
       display: block;
       font-family:
-        "Songti TC",
-        "Noto Serif TC",
-        "PMingLiU",
-        serif;
+        "Songti TC", "Noto Serif TC", "PMingLiU", serif;
       font-weight: 700;
       font-size: 51px;
       letter-spacing: .16em;
@@ -327,7 +323,6 @@
       transform: translateY(0);
     }
 
-    /* 提示平常隱藏；滑鼠移到門上才出現。 */
     .hint {
       position: absolute;
       bottom: 27px;
@@ -371,7 +366,9 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .leaf, .welcome { transition-duration: .01ms; }
+      .leaf, .welcome {
+        transition-duration: .01ms;
+      }
       .petal { animation: none; }
       #stage.open .snail {
         animation: none;
@@ -382,17 +379,24 @@
         opacity: 1;
         filter: none;
       }
-      #stage.open .welcome .en { animation: none; }
+      #stage.open .welcome .en {
+        animation: none;
+      }
     }
   </style>
 </head>
 <body>
   <main id="stage">
-    <img class="scene" src="gate-open.png"
-         alt="黃昏中的日式庭院與固定的木造門框">
+    <img
+      class="scene"
+      src="gate-open.png"
+      alt="黃昏中的日式庭院與固定的木造門框"
+    >
 
-    <div class="address"
-         aria-label="軟體動物市腹足區蝸牛路1號">
+    <div
+      class="address"
+      aria-label="軟體動物市腹足區蝸牛路1號"
+    >
       <span>軟體動物市</span>
       <span>腹足區</span>
       <span>蝸牛路1號</span>
@@ -408,31 +412,41 @@
       <div class="leaf right"></div>
     </div>
 
-    <img class="water"
-         src="hsuan-water-basin.webp"
-         alt=""
-         hidden>
-    <img class="snail"
-         src="hsuan-snail.png"
-         alt=""
-         hidden>
-    <img class="cherry"
-         src="cherry-foreground.png"
-         alt=""
-         aria-hidden="true">
+    <img
+      class="water"
+      src="hsuan-water-basin.webp"
+      alt=""
+      hidden
+    >
+    <img
+      class="snail"
+      src="hsuan-snail.png"
+      alt=""
+      hidden
+    >
+    <img
+      class="cherry"
+      src="cherry-foreground.png"
+      alt=""
+      aria-hidden="true"
+    >
 
     <i class="petal"></i>
     <i class="petal"></i>
     <i class="petal"></i>
 
-    <button class="gate-hit"
-            type="button"
-            aria-label="敲門三下，開啟大門"
-            aria-expanded="false"></button>
+    <button
+      class="gate-hit"
+      type="button"
+      aria-label="敲門三下，開啟大門"
+      aria-expanded="false"
+    ></button>
 
-    <button class="about"
-            type="button"
-            aria-label="關於宣的世界">
+    <button
+      class="about"
+      type="button"
+      aria-label="關於宣的世界"
+    >
       <span>關於我</span>
     </button>
 
