@@ -28,7 +28,6 @@
       transform-origin: center;
       overflow: hidden;
     }
-
     .scene, .cherry {
       position: absolute;
       inset: 0;
@@ -135,7 +134,7 @@
       outline-offset: -5px;
     }
 
-    /* 只顯示舊動態圖片的水柱部分。 */
+    /* 動態水柱：淡化裁切邊緣，避免水盆中央出現直條。 */
     .water {
       position: absolute;
       left: 1360px;
@@ -144,9 +143,16 @@
       height: 281px;
       object-fit: contain;
       clip-path: polygon(
-        59% 25%, 68% 25%,
-        68% 70%, 59% 70%
+        60% 25%, 66% 25%,
+        66% 70%, 60% 70%
       );
+      mask-image: linear-gradient(
+        to right,
+        transparent,
+        black 35% 65%,
+        transparent
+      );
+      mix-blend-mode: screen;
       z-index: 4;
       pointer-events: none;
     }
@@ -154,69 +160,61 @@
       display: none;
     }
 
-    /* 水盆表面的漣漪與反光。 */
+    /* 水面反光會橫向流動，漣漪只作輕微輔助。 */
     .pool {
       position: absolute;
       left: 1438px;
-      top: 762px;
+      top: 763px;
       width: 190px;
       height: 48px;
       z-index: 5;
       overflow: hidden;
       border-radius: 50%;
       pointer-events: none;
-      background:
-        radial-gradient(
-          ellipse at 53% 52%,
-          #fff6d32e 0%,
-          transparent 32%
-        ),
-        linear-gradient(
-          105deg,
-          transparent 22%,
-          #ffe9b029 43%,
-          transparent 65%
-        );
-      background-size: 100% 100%, 220% 100%;
-      animation: shimmer 3.8s ease-in-out infinite alternate;
+      mix-blend-mode: screen;
+      mask-image: radial-gradient(
+        ellipse,
+        black 45%,
+        transparent 72%
+      );
+      background: repeating-linear-gradient(
+        103deg,
+        transparent 0 17px,
+        #ffe9ae1e 20px 22px,
+        transparent 25px 39px
+      );
+      background-size: 240% 100%;
+      animation: waterSurface 4.2s linear infinite;
     }
-    .pool::before,
-    .pool::after {
+    .pool::before, .pool::after {
       content: "";
       position: absolute;
-      left: 50%;
-      top: 48%;
-      width: 38px;
-      height: 10px;
-      border: 2px solid #ffe6bdad;
+      left: 51%;
+      top: 46%;
+      width: 35px;
+      height: 7px;
+      border: 1px solid #ffe8bb73;
       border-radius: 50%;
-      transform: translate(-50%, -50%) scale(.35);
-      box-shadow: 0 0 8px #fff2c177;
+      transform: translate(-50%, -50%) scale(.3);
       opacity: 0;
-      animation: ripple 2.6s ease-out infinite;
+      animation: ripple 3.4s ease-out infinite;
     }
     .pool::after {
-      animation-delay: 1.3s;
+      animation-delay: 1.7s;
     }
     @keyframes ripple {
       0% {
-        transform: translate(-50%, -50%) scale(.35);
-        opacity: .8;
+        transform: translate(-50%, -50%) scale(.3);
+        opacity: .52;
       }
       100% {
-        transform: translate(-50%, -50%) scale(3.7);
+        transform: translate(-50%, -50%) scale(3);
         opacity: 0;
       }
     }
-    @keyframes shimmer {
-      from {
-        background-position: center, 0% center;
-        opacity: .65;
-      }
-      to {
-        background-position: center, 100% center;
-        opacity: 1;
-      }
+    @keyframes waterSurface {
+      from { background-position: 0% center; }
+      to { background-position: 100% center; }
     }
 
     .petal {
@@ -385,6 +383,7 @@
       transform: translateY(0);
     }
 
+    /* 提示只在滑鼠進入門的範圍時顯示。 */
     .hint {
       position: absolute;
       bottom: 27px;
@@ -400,10 +399,9 @@
       letter-spacing: .08em;
       white-space: nowrap;
       pointer-events: none;
-      transition: opacity .4s;
+      transition: opacity .25s;
     }
-    #stage:not(.open) .gate-hit:hover ~ .hint,
-    #stage:not(.open) .gate-hit:focus-visible ~ .hint {
+    #stage.show-hint:not(.open) .hint {
       opacity: 1;
     }
     #stage.open .hint {
@@ -554,6 +552,27 @@
     addEventListener("resize", fit);
     fit();
 
+    gate.addEventListener(
+      "pointerenter",
+      () => stage.classList.add("show-hint")
+    );
+    gate.addEventListener(
+      "pointerleave",
+      () => stage.classList.remove("show-hint")
+    );
+    gate.addEventListener(
+      "focus",
+      () => stage.classList.add("show-hint")
+    );
+    gate.addEventListener(
+      "blur",
+      () => stage.classList.remove("show-hint")
+    );
+    addEventListener(
+      "blur",
+      () => stage.classList.remove("show-hint")
+    );
+
     gate.addEventListener("click", () => {
       if (stage.classList.contains("open")) {
         stage.classList.remove("open");
@@ -574,6 +593,7 @@
 
       if (knocks >= 3) {
         stage.classList.add("open");
+        stage.classList.remove("show-hint");
         gate.setAttribute("aria-expanded", "true");
         gate.setAttribute("aria-label", "關上大門");
         knocks = 0;
