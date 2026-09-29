@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>宣的世界｜大門動畫預覽</title>
+  <title>宣的世界｜走進庭院</title>
   <style>
     :root { color-scheme: dark; font-family: "Noto Sans TC", system-ui, sans-serif; }
     * { box-sizing: border-box; }
@@ -46,9 +46,9 @@
     .leaf.right { right: 0; transform-origin: 100% 50%; background-position: -766px -215px; }
     #stage.open .leaf.left { transform: rotateY(-83deg); filter: brightness(.72); }
     #stage.open .leaf.right { transform: rotateY(83deg); filter: brightness(.72); }
+
     .gate-hit { position: absolute; left: 398px; top: 203px; width: 736px; height: 578px; z-index: 7; border: 0; background: transparent; cursor: pointer; color: transparent; }
     .gate-hit:focus-visible, .about:focus-visible { outline: 4px solid #fff; outline-offset: -5px; }
-
     .water-canvas { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
     .snail[hidden] { display: none; }
 
@@ -56,7 +56,12 @@
     .petal:nth-of-type(1) { left: 240px; top: 175px; animation-delay: 0s; }
     .petal:nth-of-type(2) { left: 526px; top: 110px; animation-delay: 2.5s; }
     .petal:nth-of-type(3) { left: 681px; top: 80px; animation-delay: 4.6s; }
-    @keyframes fall { 0% { opacity: 0; transform: translate(0,0) rotate(0); } 12% { opacity: .95; } 87% { opacity: .8; } 100% { opacity: 0; transform: translate(170px,580px) rotate(660deg); } }
+    @keyframes fall {
+      0% { opacity: 0; transform: translate(0,0) rotate(0); }
+      12% { opacity: .95; }
+      87% { opacity: .8; }
+      100% { opacity: 0; transform: translate(170px,580px) rotate(660deg); }
+    }
 
     .welcome { position: absolute; left: 488px; top: 337px; width: 657px; z-index: 2; text-align: center; color: #fff4df; opacity: 0; transform: translateY(15px); transition: opacity .7s .55s, transform .7s .55s; pointer-events: none; text-shadow: 0 3px 12px #25100d, 0 2px 3px #25100d; }
     #stage.open .welcome { opacity: 1; transform: translateY(0); }
@@ -64,12 +69,24 @@
     .welcome .en { display: block; margin-top: 5px; font-size: 29px; letter-spacing: .08em; opacity: 0; }
     #stage.open .welcome .zh { animation: zhWelcome 7s 1.3s both; }
     #stage.open .welcome .en { animation: enWelcome 5s 8.3s both; }
-    @keyframes zhWelcome { 0% { opacity: 0; filter: blur(9px); } 16%, 77% { opacity: 1; filter: blur(0); } 100% { opacity: 0; filter: blur(8px); } }
-    @keyframes enWelcome { 0% { opacity: 0; filter: blur(9px); } 20%, 82% { opacity: 1; filter: blur(0); } 100% { opacity: 0; filter: blur(8px); } }
+    @keyframes zhWelcome {
+      0% { opacity: 0; filter: blur(9px); }
+      16%, 77% { opacity: 1; filter: blur(0); }
+      100% { opacity: 0; filter: blur(8px); }
+    }
+    @keyframes enWelcome {
+      0% { opacity: 0; filter: blur(9px); }
+      20%, 82% { opacity: 1; filter: blur(0); }
+      100% { opacity: 0; filter: blur(8px); }
+    }
 
     .snail { position: absolute; left: 957px; top: 668px; width: 166px; height: 166px; object-fit: contain; z-index: 5; pointer-events: none; opacity: 0; }
     #stage.open .snail { animation: crawl 9s 1.1s both linear; }
-    @keyframes crawl { 0% { opacity: 0; transform: translateX(0); } 7%, 91% { opacity: 1; } 100% { opacity: 0; transform: translateX(-415px); } }
+    @keyframes crawl {
+      0% { opacity: 0; transform: translateX(0); }
+      7%, 91% { opacity: 1; }
+      100% { opacity: 0; transform: translateX(-415px); }
+    }
 
     .about { position: absolute; left: 1257px; top: 361px; width: 278px; height: 133px; z-index: 9; border: 0; background: transparent; cursor: pointer; color: #fff; }
     .about span { display: inline-block; padding: 9px 18px; border-radius: 18px; background: #33201ddc; opacity: 0; transform: translateY(7px); transition: .2s; font-size: 23px; }
@@ -79,12 +96,78 @@
     #stage.show-hint:not(.open) .hint { opacity: 1; }
     #stage.open .hint { opacity: 0; }
 
+    .enter {
+      position: absolute;
+      left: 679px;
+      top: 713px;
+      width: 260px;
+      z-index: 10;
+      border: 1px solid #ffedc3;
+      border-radius: 999px;
+      padding: 13px 22px;
+      background: #2b1918db;
+      color: #fff5dc;
+      font-size: 24px;
+      letter-spacing: .12em;
+      cursor: pointer;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(12px);
+      transition: opacity .5s, transform .5s, visibility 0s .5s;
+    }
+    #stage.open:not(.inside) .enter {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+      transition-delay: 2.2s, 2.2s, 0s;
+    }
+    .enter:hover, .enter:focus-visible { background: #5a3026f0; outline: 3px solid #fff2cf; }
+
+    .house-view {
+      position: absolute;
+      inset: 0;
+      z-index: 12;
+      background: #241916;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 1.35s ease, visibility 0s 1.35s;
+    }
+    #stage.inside .house-view {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity 1.35s ease, visibility 0s;
+    }
+    .house-view img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transform: scale(1.045);
+      transition: transform 2.1s ease-out;
+    }
+    #stage.inside .house-view img { transform: scale(1); }
+    .back {
+      position: absolute;
+      top: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 12px 22px;
+      border: 1px solid #ffe9bc;
+      border-radius: 999px;
+      color: #fff7e9;
+      background: #281918dc;
+      font-size: 22px;
+      white-space: nowrap;
+      cursor: pointer;
+    }
+    .back:hover, .back:focus-visible { background: #593123; outline: 3px solid #fff2cf; }
+
     dialog { border: 1px solid #f5d6ac; border-radius: 16px; background: #281b1c; color: #fff6e9; padding: 30px; max-width: min(90vw,480px); box-shadow: 0 20px 90px #0008; }
     dialog::backdrop { background: #130d12a8; }
     dialog button { padding: 8px 18px; border: 1px solid #d5b08b; border-radius: 9px; background: #503431; color: white; cursor: pointer; }
 
     @media (prefers-reduced-motion: reduce) {
-      .leaf, .welcome { transition-duration: .01ms; }
+      .leaf, .welcome, .house-view, .house-view img { transition-duration: .01ms; }
       .petal { animation: none; }
       #stage.open .snail { animation: none; opacity: 1; }
       #stage.open .welcome .zh { animation: none; opacity: 1; filter: none; }
@@ -94,25 +177,36 @@
 </head>
 <body>
   <main id="stage">
-    <img class="scene" src="gate-open.png" alt="黃昏中的日式庭院與固定的木造門框">
+    <img class="scene" src="gate-open-waterless.png" alt="黃昏中的日式庭院與固定的木造門框">
+
     <div class="address" aria-label="軟體動物市腹足區蝸牛路1號">
       <span>軟體動物市</span><span>腹足區</span><span>蝸牛路1號</span>
     </div>
+
     <div class="welcome" aria-live="polite">
       <strong class="zh">歡迎來到宣的世界</strong>
       <span class="en">Welcome to Hsuan World</span>
     </div>
+
     <div class="doorway" aria-hidden="true">
       <div class="leaf left"></div>
       <div class="leaf right"></div>
     </div>
+
     <canvas class="water-canvas" id="water-canvas" width="1672" height="941" aria-hidden="true"></canvas>
     <img class="snail" src="hsuan-snail.png" alt="" hidden>
     <img class="cherry" src="cherry-foreground.png" alt="" aria-hidden="true">
     <i class="petal"></i><i class="petal"></i><i class="petal"></i>
+
     <button class="gate-hit" type="button" aria-label="敲門三下，開啟大門" aria-expanded="false"></button>
     <button class="about" type="button" aria-label="關於宣的世界"><span>關於我</span></button>
     <div class="hint" aria-hidden="true">敲門三下，進來看看</div>
+    <button class="enter" type="button">走進庭院</button>
+
+    <section class="house-view" aria-label="宣的世界庭院與房屋">
+      <img src="house-correct-sign.png" alt="石板路通往木造房屋，右側蓮花池裡有小青蛙，入口內亮著螺紋蝸牛殼燈">
+      <button class="back" type="button">← 返回大門</button>
+    </section>
   </main>
 
   <dialog id="about-dialog">
@@ -126,6 +220,8 @@
     const gate = document.querySelector('.gate-hit');
     const about = document.querySelector('.about');
     const dialog = document.querySelector('#about-dialog');
+    const enter = document.querySelector('.enter');
+    const back = document.querySelector('.back');
     let knocks = 0, lastKnock = 0;
 
     function fit() {
@@ -162,12 +258,19 @@
     });
 
     about.addEventListener('click', () => dialog.showModal());
+    enter.addEventListener('click', () => {
+      stage.classList.add('inside');
+      back.focus();
+    });
+    back.addEventListener('click', () => {
+      stage.classList.remove('inside');
+      enter.focus();
+    });
 
     const snail = document.querySelector('.snail');
     snail.addEventListener('load', () => { snail.hidden = false; }, {once: true});
     if (snail.complete && snail.naturalWidth) snail.hidden = false;
 
-    // 只動石盆內側的水面；不重畫竹管、石盆或整塊背景。
     const scene = document.querySelector('.scene');
     const canvas = document.querySelector('#water-canvas');
     const ctx = canvas.getContext('2d');
@@ -186,58 +289,74 @@
       const seconds = time / 1000;
       ctx.clearRect(1420, 672, 230, 145);
 
-      // 遮罩比石盆內緣小，水的動態不會碰到石盆邊框。
       ctx.save();
       ctx.beginPath();
       ctx.ellipse(1534, 772, 77, 14, -0.035, 0, Math.PI * 2);
       ctx.clip();
-      ctx.globalAlpha = 0.86;
+      ctx.globalAlpha = 0.97;
 
       for (let y = 755; y < 790; y += 2) {
         const horizontal =
-          Math.sin(y * .29 + seconds * 3.1) * 2.3 +
-          Math.sin(y * .13 - seconds * 1.7) * 1.2;
-        const vertical = Math.sin(y * .37 + seconds * 2.2) * .8;
-        ctx.drawImage(
-          scene, 1448 + horizontal, y + vertical, 174, 2.4,
-          1448, y, 174, 2.4
-        );
+          Math.sin(y * .29 + seconds * 3.1) * 4.4 +
+          Math.sin(y * .13 - seconds * 1.7) * 2.2;
+        const vertical = Math.sin(y * .37 + seconds * 2.2) * 1.4;
+        ctx.drawImage(scene, 1448 + horizontal, y + vertical, 174, 2.4,
+          1448, y, 174, 2.4);
       }
 
       ctx.globalAlpha = 1;
-      for (let i = 0; i < 5; i++) {
-        const x = 1470 + i * 29 + Math.sin(seconds * 1.7 + i * 2) * 8;
-        const y = 769 + Math.sin(seconds * 2.5 + i * 2.3) * 5;
+      for (let i = 0; i < 7; i++) {
+        const x = 1460 + i * 23 + Math.sin(seconds * 2.4 + i * 2) * 11;
+        const y = 769 + Math.sin(seconds * 3.2 + i * 2.3) * 5;
         const glow = ctx.createLinearGradient(x - 15, y, x + 18, y);
         glow.addColorStop(0, 'rgba(255,229,171,0)');
-        glow.addColorStop(
-          .5,
-          `rgba(255,232,186,${.11 + .10 * Math.sin(seconds * 2 + i) ** 2})`
-        );
+        glow.addColorStop(.5,
+          `rgba(255,237,204,${.28 + .20 * Math.sin(seconds * 3 + i) ** 2})`);
         glow.addColorStop(1, 'rgba(255,229,171,0)');
         ctx.fillStyle = glow;
         ctx.beginPath();
-        ctx.ellipse(x, y, 19, 1.3, -.08, 0, Math.PI * 2);
+        ctx.ellipse(x, y, 20, 1.7, -.08, 0, Math.PI * 2);
         ctx.fill();
+      }
+
+      for (let i = 0; i < 3; i++) {
+        const phase = (seconds * 1.3 + i / 3) % 1;
+        ctx.strokeStyle = `rgba(255,239,212,${.44 * (1 - phase)})`;
+        ctx.lineWidth = 1.6;
+        ctx.beginPath();
+        ctx.ellipse(1543, 775, 6 + phase * 37, 2 + phase * 9, -.05, -.2, 2.5);
+        ctx.stroke();
       }
       ctx.restore();
 
-      // 原圖已有水柱，只沿著它加小亮點，不增加第二根出水口。
-      for (let i = 0; i < 10; i++) {
-        const progress = (i / 10 + seconds * .53) % 1;
-        const inverse = 1 - progress;
-        const x =
-          inverse * inverse * 1565 +
-          2 * inverse * progress * 1544 +
-          progress * progress * 1544;
-        const y =
-          inverse * inverse * 690 +
-          2 * inverse * progress * 716 +
-          progress * progress * 765;
+      const waterX = p =>
+        1563 - 22 * Math.sin(p * Math.PI / 2) +
+        Math.sin(seconds * 9 + p * 12) * 1.1 * p;
+      const waterY = p => 676 + 101 * p;
+      const stream = ctx.createLinearGradient(1538, 685, 1567, 685);
+      stream.addColorStop(0, 'rgba(137,203,218,.45)');
+      stream.addColorStop(.43, 'rgba(235,248,245,.85)');
+      stream.addColorStop(1, 'rgba(255,230,183,.54)');
+      ctx.lineCap = 'round';
+      ctx.strokeStyle = stream;
+      ctx.lineWidth = 7;
+      ctx.beginPath();
+
+      for (let j = 0; j <= 24; j++) {
+        const p = j / 24;
+        if (j === 0) ctx.moveTo(waterX(p), waterY(p));
+        else ctx.lineTo(waterX(p), waterY(p));
+      }
+      ctx.stroke();
+
+      for (let i = 0; i < 18; i++) {
+        const progress = (i / 18 + seconds * .8) % 1;
+        const x = waterX(progress) + Math.sin(i * 13.2) * 2;
+        const y = waterY(progress);
         ctx.fillStyle =
-          `rgba(255,243,209,${.11 + .17 * Math.sin(Math.PI * progress)})`;
+          `rgba(255,255,245,${.35 + .48 * Math.sin(Math.PI * progress)})`;
         ctx.beginPath();
-        ctx.ellipse(x, y, 1.1, 2.3, -.15, 0, Math.PI * 2);
+        ctx.ellipse(x, y, 1.6, 3.7, -.17, 0, Math.PI * 2);
         ctx.fill();
       }
     }
