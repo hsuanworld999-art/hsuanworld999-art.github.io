@@ -39,7 +39,6 @@
     .scene { z-index: 0; }
     .cherry { z-index: 6; }
 
-    /* 覆蓋底圖門牌中的錯字，保留原有外框與徽章。 */
     .address {
       position: absolute;
       left: 116px;
@@ -136,10 +135,7 @@
       outline-offset: -5px;
     }
 
-    /*
-      動態素材原本也帶有竹管和水盆。
-      只露出流動水柱，避免出現第二個水盆。
-    */
+    /* 只顯示舊動態圖片的水柱部分。 */
     .water {
       position: absolute;
       left: 1360px;
@@ -154,8 +150,74 @@
       z-index: 4;
       pointer-events: none;
     }
-    .water[hidden],
-    .snail[hidden] { display: none; }
+    .water[hidden], .snail[hidden] {
+      display: none;
+    }
+
+    /* 水盆表面的漣漪與反光。 */
+    .pool {
+      position: absolute;
+      left: 1438px;
+      top: 762px;
+      width: 190px;
+      height: 48px;
+      z-index: 5;
+      overflow: hidden;
+      border-radius: 50%;
+      pointer-events: none;
+      background:
+        radial-gradient(
+          ellipse at 53% 52%,
+          #fff6d32e 0%,
+          transparent 32%
+        ),
+        linear-gradient(
+          105deg,
+          transparent 22%,
+          #ffe9b029 43%,
+          transparent 65%
+        );
+      background-size: 100% 100%, 220% 100%;
+      animation: shimmer 3.8s ease-in-out infinite alternate;
+    }
+    .pool::before,
+    .pool::after {
+      content: "";
+      position: absolute;
+      left: 50%;
+      top: 48%;
+      width: 38px;
+      height: 10px;
+      border: 2px solid #ffe6bdad;
+      border-radius: 50%;
+      transform: translate(-50%, -50%) scale(.35);
+      box-shadow: 0 0 8px #fff2c177;
+      opacity: 0;
+      animation: ripple 2.6s ease-out infinite;
+    }
+    .pool::after {
+      animation-delay: 1.3s;
+    }
+    @keyframes ripple {
+      0% {
+        transform: translate(-50%, -50%) scale(.35);
+        opacity: .8;
+      }
+      100% {
+        transform: translate(-50%, -50%) scale(3.7);
+        opacity: 0;
+      }
+    }
+    @keyframes shimmer {
+      from {
+        background-position: center, 0% center;
+        opacity: .65;
+      }
+      to {
+        background-position: center, 100% center;
+        opacity: 1;
+      }
+    }
 
     .petal {
       position: absolute;
@@ -344,7 +406,9 @@
     #stage:not(.open) .gate-hit:focus-visible ~ .hint {
       opacity: 1;
     }
-    #stage.open .hint { opacity: 0; }
+    #stage.open .hint {
+      opacity: 0;
+    }
 
     dialog {
       border: 1px solid #f5d6ac;
@@ -355,7 +419,9 @@
       max-width: min(90vw,480px);
       box-shadow: 0 20px 90px #0008;
     }
-    dialog::backdrop { background: #130d12a8; }
+    dialog::backdrop {
+      background: #130d12a8;
+    }
     dialog button {
       padding: 8px 18px;
       border: 1px solid #d5b08b;
@@ -369,7 +435,10 @@
       .leaf, .welcome {
         transition-duration: .01ms;
       }
-      .petal { animation: none; }
+      .petal, .pool,
+      .pool::before, .pool::after {
+        animation: none;
+      }
       #stage.open .snail {
         animation: none;
         opacity: 1;
@@ -418,6 +487,8 @@
       alt=""
       hidden
     >
+    <div class="pool" aria-hidden="true"></div>
+
     <img
       class="snail"
       src="hsuan-snail.png"
