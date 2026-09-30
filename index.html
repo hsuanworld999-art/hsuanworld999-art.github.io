@@ -332,18 +332,12 @@
       transition: opacity .4s;
     }
 
-    #stage.show-hint:not(.open) .hint {
-      opacity: 1;
-    }
-
-    #stage.open .hint {
-      opacity: 0;
-    }
+    #stage.show-hint:not(.open) .hint { opacity: 1; }
+    #stage.open .hint { opacity: 0; }
 
     .enter {
       position: absolute;
       left: 50%;
-      top: auto;
       bottom: 24px;
       width: 260px;
       z-index: 10;
@@ -403,14 +397,12 @@
       top: 50%;
       height: 100%;
       aspect-ratio: 1597 / 985;
-      transform:
-        translate(-50%, -50%) scale(1.045);
+      transform: translate(-50%, -50%) scale(1.045);
       transition: transform 2.1s ease-out;
     }
 
     #stage.inside .house-art {
-      transform:
-        translate(-50%, -50%) scale(1);
+      transform: translate(-50%, -50%) scale(1);
     }
 
     .house-art img,
@@ -424,10 +416,9 @@
 
     .house-water {
       pointer-events: none;
-      mix-blend-mode: screen;
+      mix-blend-mode: normal;
     }
 
-    /* 固定顯示正確的「宣的世界」 */
     .house-sign-zh {
       position: absolute;
       left: 80.75%;
@@ -449,9 +440,7 @@
       font-size: 20px;
       font-weight: 700;
       letter-spacing: .045em;
-      text-shadow:
-        0 1px 2px #3a1b11,
-        0 0 3px #ffc97c66;
+      text-shadow: 0 1px 2px #3a1b11, 0 0 3px #ffc97c66;
       pointer-events: none;
     }
 
@@ -486,9 +475,7 @@
       box-shadow: 0 20px 90px #0008;
     }
 
-    dialog::backdrop {
-      background: #130d12a8;
-    }
+    dialog::backdrop { background: #130d12a8; }
 
     dialog button {
       padding: 8px 18px;
@@ -503,25 +490,14 @@
       .leaf, .welcome, .house-view, .house-art {
         transition-duration: .01ms;
       }
-
-      .petal {
-        animation: none;
-      }
-
-      #stage.open .snail {
-        animation: none;
-        opacity: 1;
-      }
-
+      .petal { animation: none; }
+      #stage.open .snail { animation: none; opacity: 1; }
       #stage.open .welcome .zh {
         animation: none;
         opacity: 1;
         filter: none;
       }
-
-      #stage.open .welcome .en {
-        animation: none;
-      }
+      #stage.open .welcome .en { animation: none; }
     }
   </style>
 </head>
@@ -633,7 +609,6 @@
         innerWidth / 1672,
         innerHeight / 941
       );
-
       stage.style.transform =
         `translate(-50%, -50%) scale(${scale})`;
     }
@@ -641,25 +616,25 @@
     addEventListener('resize', fit);
     fit();
 
-    gate.addEventListener('pointerenter', () => {
-      stage.classList.add('show-hint');
-    });
+    gate.addEventListener('pointerenter', () =>
+      stage.classList.add('show-hint')
+    );
 
-    gate.addEventListener('pointerleave', () => {
-      stage.classList.remove('show-hint');
-    });
+    gate.addEventListener('pointerleave', () =>
+      stage.classList.remove('show-hint')
+    );
 
-    gate.addEventListener('focus', () => {
-      stage.classList.add('show-hint');
-    });
+    gate.addEventListener('focus', () =>
+      stage.classList.add('show-hint')
+    );
 
-    gate.addEventListener('blur', () => {
-      stage.classList.remove('show-hint');
-    });
+    gate.addEventListener('blur', () =>
+      stage.classList.remove('show-hint')
+    );
 
-    addEventListener('blur', () => {
-      stage.classList.remove('show-hint');
-    });
+    addEventListener('blur', () =>
+      stage.classList.remove('show-hint')
+    );
 
     gate.addEventListener('click', () => {
       if (stage.classList.contains('open')) {
@@ -683,17 +658,14 @@
         stage.classList.add('open');
         stage.classList.remove('show-hint');
         gate.setAttribute('aria-expanded', 'true');
-        gate.setAttribute(
-          'aria-label',
-          '關上大門'
-        );
+        gate.setAttribute('aria-label', '關上大門');
         knocks = 0;
       }
     });
 
-    about.addEventListener('click', () => {
-      dialog.showModal();
-    });
+    about.addEventListener('click', () =>
+      dialog.showModal()
+    );
 
     enter.addEventListener('click', () => {
       stage.classList.add('inside');
@@ -724,116 +696,282 @@
 
     const pond = document.querySelector('.house-water');
     const pondCtx = pond.getContext('2d');
+    const pondPhoto = document.querySelector('.house-art img');
 
+    const pondArea = {
+      x: 968,
+      y: 766,
+      width: 629,
+      height: 219
+    };
+
+    let pondSource;
+    let pondMask;
+    let pondPixels;
     let pondActive = false;
     let previousPondFrame = 0;
+
+    const waveColumns = [];
+
+    function preparePond() {
+      if (pondSource || !pondPhoto.naturalWidth) return;
+
+      const photo = document.createElement('canvas');
+      photo.width = pond.width;
+      photo.height = pond.height;
+
+      const photoCtx = photo.getContext(
+        '2d',
+        { willReadFrequently: true }
+      );
+
+      photoCtx.drawImage(
+        pondPhoto,
+        0, 0,
+        pond.width,
+        pond.height
+      );
+
+      pondSource = photoCtx.getImageData(
+        0, 0,
+        pond.width,
+        pond.height
+      ).data;
+
+      const mask = document.createElement('canvas');
+      mask.width = pond.width;
+      mask.height = pond.height;
+
+      const m = mask.getContext(
+        '2d',
+        { willReadFrequently: true }
+      );
+
+      m.fillStyle = '#fff';
+      m.beginPath();
+
+      const shore = [
+        [994,788], [1067,778], [1142,791], [1217,786],
+        [1280,791], [1350,809], [1415,833], [1460,854],
+        [1500,877], [1520,921], [1491,951], [1457,971],
+        [1320,980], [1224,972], [1150,942], [1093,929],
+        [1061,901], [1007,893], [982,874], [986,831]
+      ];
+
+      shore.forEach(([x,y], i) => {
+        if (i) {
+          m.lineTo(x,y);
+        } else {
+          m.moveTo(x,y);
+        }
+      });
+
+      m.closePath();
+      m.fill();
+
+      /* 保護蓮葉、蓮花和青蛙 */
+      m.globalCompositeOperation = 'destination-out';
+
+      const pads = [
+        [1003,865,68,30],
+        [1101,803,46,15],
+        [1166,817,46,17],
+        [1191,794,27,13],
+        [1241,801,42,16],
+        [1269,821,45,15],
+        [1330,837,67,27],
+        [1277,914,52,23],
+        [1418,906,109,39],
+        [1512,927,61,28],
+        [1417,964,61,23],
+        [1317,815,43,43],
+        [1404,878,39,51]
+      ];
+
+      pads.forEach(([x,y,rx,ry]) => {
+        m.beginPath();
+        m.ellipse(x,y,rx,ry,0,0,Math.PI*2);
+        m.fill();
+      });
+
+      /* 避開石頭、花瓣和近岸植栽 */
+      const protectedAreas = [
+        [1070,946,53,29],
+        [1197,969,39,22],
+        [1095,785,16,10],
+        [1208,948,19,10],
+        [1320,944,17,9]
+      ];
+
+      protectedAreas.forEach(([x,y,rx,ry]) => {
+        m.beginPath();
+        m.ellipse(x,y,rx,ry,0,0,Math.PI*2);
+        m.fill();
+      });
+
+      const soft = document.createElement('canvas');
+      soft.width = pond.width;
+      soft.height = pond.height;
+
+      const sm = soft.getContext(
+        '2d',
+        { willReadFrequently: true }
+      );
+
+      sm.filter = 'blur(1.4px)';
+      sm.drawImage(mask,0,0);
+      sm.filter = 'none';
+      sm.globalCompositeOperation = 'destination-in';
+      sm.drawImage(mask,0,0);
+
+      pondMask = sm.getImageData(
+        pondArea.x,
+        pondArea.y,
+        pondArea.width,
+        pondArea.height
+      ).data;
+
+      pondPixels = pondCtx.createImageData(
+        pondArea.width,
+        pondArea.height
+      );
+
+      for (let x=0; x<pondArea.width; x++) {
+        const worldX = x + pondArea.x;
+
+        waveColumns[x] = [.014,.018,.022,.01].map(f => [
+          Math.sin(worldX*f),
+          Math.cos(worldX*f)
+        ]);
+      }
+    }
 
     function drawPond(time) {
       if (
         !stage.classList.contains('inside') ||
         reducedMotion.matches
       ) {
-        pondCtx.clearRect(
-          0, 0,
-          pond.width,
-          pond.height
-        );
+        pondCtx.clearRect(0,0,pond.width,pond.height);
         pondActive = false;
         return;
       }
 
       requestAnimationFrame(drawPond);
 
-      if (time - previousPondFrame < 33) return;
-      previousPondFrame = time;
+      if (
+        document.hidden ||
+        time - previousPondFrame < 33
+      ) return;
 
-      pondCtx.clearRect(
-        0, 0,
-        pond.width,
-        pond.height
-      );
+      previousPondFrame = time;
+      preparePond();
+
+      if (!pondSource) return;
 
       const seconds = time / 1000;
+      const out = pondPixels.data;
+      const w = pondArea.width;
+      const h = pondArea.height;
+      const fullW = pond.width;
 
-      /* 限制漣漪在池塘中央的水面 */
-      pondCtx.save();
-      pondCtx.beginPath();
-      pondCtx.moveTo(1070, 808);
-      pondCtx.lineTo(1142, 811);
-      pondCtx.lineTo(1194, 838);
-      pondCtx.lineTo(1240, 859);
-      pondCtx.lineTo(1227, 924);
-      pondCtx.lineTo(1123, 943);
-      pondCtx.lineTo(1071, 918);
-      pondCtx.lineTo(1100, 883);
-      pondCtx.lineTo(1088, 846);
-      pondCtx.closePath();
-      pondCtx.clip();
+      for (let y=0; y<h; y++) {
+        const worldY = y + pondArea.y;
 
-      const spots = [
-        [1107, 824, 0],
-        [1186, 911, .42],
-        [1198, 873, .72]
-      ];
+        const a = worldY*.17 - seconds*2.5;
+        const b = worldY*.09 + seconds*1.7;
+        const c = worldY*.13 - seconds*1.9;
+        const d = worldY*.24 + seconds*2.8;
 
-      for (const [x, y, offset] of spots) {
-        for (let i = 0; i < 3; i++) {
-          const phase =
-            (seconds * .34 + offset + i / 3) % 1;
+        const sa = Math.sin(a);
+        const ca = Math.cos(a);
+        const sb = Math.sin(b);
+        const cb = Math.cos(b);
+        const sc = Math.sin(c);
+        const cc = Math.cos(c);
+        const sd = Math.sin(d);
+        const cd = Math.cos(d);
 
-          const radius = 5 + phase * 47;
+        const depth = .65 + .6*y/h;
 
-          pondCtx.strokeStyle =
-            `rgba(255,230,185,${.49 * (1 - phase)})`;
+        for (let x=0; x<w; x++) {
+          const p = (y*w+x)*4;
+          const alpha = pondMask[p+3];
 
-          pondCtx.lineWidth =
-            1.5 - phase * .55;
+          if (!alpha) {
+            out[p+3] = 0;
+            continue;
+          }
 
-          pondCtx.beginPath();
-          pondCtx.ellipse(
-            x,
-            y,
-            radius,
-            radius * .27,
-            -.08,
-            .12,
-            Math.PI * 1.9
+          const col = waveColumns[x];
+
+          const u = (
+            3.8*(sa*col[0][1] + ca*col[0][0]) +
+            2.2*(sb*col[1][1] - cb*col[1][0])
+          ) * depth;
+
+          const v = (
+            .95*(sc*col[2][1] + cc*col[2][0]) +
+            .55*(sd*col[3][1] - cd*col[3][0])
+          ) * depth;
+
+          const sx = Math.max(
+            0,
+            Math.min(
+              fullW-2,
+              x + pondArea.x + u
+            )
           );
-          pondCtx.stroke();
+
+          const sy = Math.max(
+            0,
+            Math.min(
+              pond.height-2,
+              worldY + v
+            )
+          );
+
+          const ix = Math.floor(sx);
+          const iy = Math.floor(sy);
+          const fx = sx-ix;
+          const fy = sy-iy;
+
+          const q = (iy*fullW+ix)*4;
+          const row = fullW*4;
+
+          const aa = (1-fx)*(1-fy);
+          const bb = fx*(1-fy);
+          const ccw = (1-fx)*fy;
+          const dd = fx*fy;
+
+          const light = 1 + .025*(
+            sa*col[0][1] + ca*col[0][0]
+          );
+
+          for (let channel=0; channel<3; channel++) {
+            out[p+channel] = (
+              pondSource[q+channel]*aa +
+              pondSource[q+4+channel]*bb +
+              pondSource[q+row+channel]*ccw +
+              pondSource[q+row+4+channel]*dd
+            ) * light;
+          }
+
+          out[p+3] = alpha;
         }
       }
 
-      for (let i = 0; i < 14; i++) {
-        const x =
-          1084 +
-          (i * 23) % 150 +
-          Math.sin(seconds * .9 + i) * 6;
+      pondCtx.clearRect(
+        pondArea.x,
+        pondArea.y,
+        w,
+        h
+      );
 
-        const y =
-          844 + (i * 37) % 102;
-
-        const shimmer = Math.max(
-          0,
-          Math.sin(seconds * 2.3 + i * 1.8)
-        );
-
-        pondCtx.fillStyle =
-          `rgba(255,221,163,${.24 * shimmer})`;
-
-        pondCtx.beginPath();
-        pondCtx.ellipse(
-          x,
-          y,
-          3 + shimmer * 4,
-          .8,
-          -.1,
-          0,
-          Math.PI * 2
-        );
-        pondCtx.fill();
-      }
-
-      pondCtx.restore();
+      pondCtx.putImageData(
+        pondPixels,
+        pondArea.x,
+        pondArea.y
+      );
     }
 
     function startPond() {
@@ -843,16 +981,25 @@
         reducedMotion.matches
       ) return;
 
+      preparePond();
       pondActive = true;
       requestAnimationFrame(drawPond);
     }
+
+    pondPhoto.addEventListener('load', () => {
+      pondSource = null;
+
+      if (stage.classList.contains('inside')) {
+        startPond();
+      }
+    });
 
     let waterStarted = false;
     let previousFrame = 0;
 
     function drawWater(time) {
       if (reducedMotion.matches) {
-        ctx.clearRect(0, 0, 1672, 941);
+        ctx.clearRect(0,0,1672,941);
         waterStarted = false;
         return;
       }
@@ -863,62 +1010,53 @@
       previousFrame = time;
 
       const seconds = time / 1000;
-      ctx.clearRect(1420, 672, 230, 145);
+      ctx.clearRect(1420,672,230,145);
 
       ctx.save();
       ctx.beginPath();
       ctx.ellipse(
-        1534,
-        772,
-        77,
-        14,
+        1534,772,
+        77,14,
         -.035,
         0,
-        Math.PI * 2
+        Math.PI*2
       );
       ctx.clip();
       ctx.globalAlpha = .97;
 
-      for (let y = 755; y < 790; y += 2) {
+      for (let y=755; y<790; y+=2) {
         const horizontal =
-          Math.sin(y * .29 + seconds * 3.1) * 4.4 +
-          Math.sin(y * .13 - seconds * 1.7) * 2.2;
+          Math.sin(y*.29 + seconds*3.1)*4.4 +
+          Math.sin(y*.13 - seconds*1.7)*2.2;
 
         const vertical =
-          Math.sin(y * .37 + seconds * 2.2) * 1.4;
+          Math.sin(y*.37 + seconds*2.2)*1.4;
 
         ctx.drawImage(
           scene,
-          1448 + horizontal,
-          y + vertical,
-          174,
-          2.4,
-          1448,
-          y,
-          174,
-          2.4
+          1448+horizontal,
+          y+vertical,
+          174,2.4,
+          1448,y,
+          174,2.4
         );
       }
 
       ctx.globalAlpha = 1;
 
-      for (let i = 0; i < 7; i++) {
+      for (let i=0; i<7; i++) {
         const x =
-          1460 +
-          i * 23 +
-          Math.sin(seconds * 2.4 + i * 2) * 11;
+          1460 + i*23 +
+          Math.sin(seconds*2.4 + i*2)*11;
 
         const y =
           769 +
-          Math.sin(seconds * 3.2 + i * 2.3) * 5;
+          Math.sin(seconds*3.2 + i*2.3)*5;
 
-        const glow =
-          ctx.createLinearGradient(
-            x - 15,
-            y,
-            x + 18,
-            y
-          );
+        const glow = ctx.createLinearGradient(
+          x-15,y,
+          x+18,y
+        );
 
         glow.addColorStop(
           0,
@@ -927,7 +1065,7 @@
 
         glow.addColorStop(
           .5,
-          `rgba(255,237,204,${.28 + .20 * Math.sin(seconds * 3 + i) ** 2})`
+          `rgba(255,237,204,${.28 + .20*Math.sin(seconds*3+i)**2})`
         );
 
         glow.addColorStop(
@@ -938,31 +1076,28 @@
         ctx.fillStyle = glow;
         ctx.beginPath();
         ctx.ellipse(
-          x,
-          y,
-          20,
-          1.7,
+          x,y,
+          20,1.7,
           -.08,
           0,
-          Math.PI * 2
+          Math.PI*2
         );
         ctx.fill();
       }
 
-      for (let i = 0; i < 3; i++) {
+      for (let i=0; i<3; i++) {
         const phase =
-          (seconds * 1.3 + i / 3) % 1;
+          (seconds*1.3 + i/3)%1;
 
         ctx.strokeStyle =
-          `rgba(255,239,212,${.44 * (1 - phase)})`;
+          `rgba(255,239,212,${.44*(1-phase)})`;
 
         ctx.lineWidth = 1.6;
         ctx.beginPath();
         ctx.ellipse(
-          1543,
-          775,
-          6 + phase * 37,
-          2 + phase * 9,
+          1543,775,
+          6+phase*37,
+          2+phase*9,
           -.05,
           -.2,
           2.5
@@ -974,20 +1109,16 @@
 
       const waterX = p =>
         1563 -
-        22 * Math.sin(p * Math.PI / 2) +
-        Math.sin(seconds * 9 + p * 12) *
-        1.1 * p;
+        22*Math.sin(p*Math.PI/2) +
+        Math.sin(seconds*9+p*12)*1.1*p;
 
       const waterY = p =>
-        676 + 101 * p;
+        676 + 101*p;
 
-      const stream =
-        ctx.createLinearGradient(
-          1538,
-          685,
-          1567,
-          685
-        );
+      const stream = ctx.createLinearGradient(
+        1538,685,
+        1567,685
+      );
 
       stream.addColorStop(
         0,
@@ -1009,46 +1140,38 @@
       ctx.lineWidth = 7;
       ctx.beginPath();
 
-      for (let j = 0; j <= 24; j++) {
-        const p = j / 24;
+      for (let j=0; j<=24; j++) {
+        const p = j/24;
 
-        if (j === 0) {
-          ctx.moveTo(
-            waterX(p),
-            waterY(p)
-          );
+        if (j===0) {
+          ctx.moveTo(waterX(p),waterY(p));
         } else {
-          ctx.lineTo(
-            waterX(p),
-            waterY(p)
-          );
+          ctx.lineTo(waterX(p),waterY(p));
         }
       }
 
       ctx.stroke();
 
-      for (let i = 0; i < 18; i++) {
+      for (let i=0; i<18; i++) {
         const progress =
-          (i / 18 + seconds * .8) % 1;
+          (i/18 + seconds*.8)%1;
 
         const x =
           waterX(progress) +
-          Math.sin(i * 13.2) * 2;
+          Math.sin(i*13.2)*2;
 
         const y = waterY(progress);
 
         ctx.fillStyle =
-          `rgba(255,255,245,${.35 + .48 * Math.sin(Math.PI * progress)})`;
+          `rgba(255,255,245,${.35 + .48*Math.sin(Math.PI*progress)})`;
 
         ctx.beginPath();
         ctx.ellipse(
-          x,
-          y,
-          1.6,
-          3.7,
+          x,y,
+          1.6,3.7,
           -.17,
           0,
-          Math.PI * 2
+          Math.PI*2
         );
         ctx.fill();
       }
@@ -1066,16 +1189,19 @@
       requestAnimationFrame(drawWater);
     }
 
-    scene.addEventListener('load', startWater);
+    scene.addEventListener('load',startWater);
 
     if (scene.complete) {
       startWater();
     }
 
-    reducedMotion.addEventListener(
-      'change',
-      startWater
-    );
+    reducedMotion.addEventListener('change', () => {
+      startWater();
+
+      if (stage.classList.contains('inside')) {
+        startPond();
+      }
+    });
   </script>
 </body>
 </html>
